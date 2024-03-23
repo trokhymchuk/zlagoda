@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 
-<jsp:include page="header.jsp" />
+<jsp:include page="header.jsp"/>
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="Kate" password=""/>
@@ -22,6 +22,7 @@
             <th scope="col">Price</th>
             <th scope="col">Products number</th>
             <th scope="col">Promotional</th>
+            <th scope="col">Edit</th>
             <th scope="col">Delete</th>
 
         </tr>
@@ -51,12 +52,24 @@
                                     </button>
                                 </c:when>
                                 <c:otherwise>
-                                    <button type="button" onclick="del_promotional('${row.UPC_prom}')"
+                                    <button type="button" onclick="del_promotional('${row.UPC}')"
                                             class="btn btn-danger">Del promotional
                                     </button>
                                 </c:otherwise>
                             </c:choose>
 
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+                <td>
+                    <c:choose>
+                        <c:when test="${row.promotional_product}">
+                            <a class="btn btn-primary disabled" href="#"><i
+                                    class="fa-solid fa-pen-to-square"></i></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a class="btn btn-primary" href="edit_store_product.jsp?UPC=${row.UPC}"><i
+                                    class="fa-solid fa-pen-to-square"></i></a>
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -82,7 +95,7 @@
             data: {UPC: UPC, action: "delete"},
             success: function (data) {
                 console.log(data);
-          //      alert("The product was deleted successfully!");
+                //      alert("The product was deleted successfully!");
                 window.location.replace("http://localhost:8080/store_products.jsp");
 
             },
@@ -103,7 +116,7 @@
             data: {UPC: UPC, action: "add_promotional"},
             success: function (data) {
                 console.log(data);
-         //       alert("The product was deleted successfully!");
+                //       alert("The product was deleted successfully!");
                 window.location.replace("http://localhost:8080/store_products.jsp");
             },
             error: function (jqXHR, exception) {
@@ -123,7 +136,7 @@
             data: {UPC: UPC, action: "del_promotional"},
             success: function (data) {
                 console.log(data);
-       //         alert("The product was deleted successfully!");
+                //         alert("The product was deleted successfully!");
                 window.location.replace("http://localhost:8080/store_products.jsp");
             },
             error: function (jqXHR, exception) {
@@ -137,4 +150,4 @@
 
 </script>
 
-<jsp:include page="footer.jsp" />
+<jsp:include page="footer.jsp"/>

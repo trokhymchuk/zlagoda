@@ -122,20 +122,39 @@ public class StoreProducts extends HttpServlet {
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-        String stat = "UPDATE Product SET category_number = ?, product_name = ?, characteristics = ? WHERE id_product = ?";
+        String stat = "UPDATE Store_product SET products_number = ?, selling_price = ? WHERE UPC = ?";
         PreparedStatement ps = connection.prepareStatement(stat);
-        ps.setInt(1, Integer.parseInt(request.getParameter("category")));
-        ps.setString(2, request.getParameter("name"));
-        ps.setString(3, request.getParameter("characteristics"));
-        ps.setInt(4, Integer.parseInt(request.getParameter("id")));
+        ps.setInt(1, Integer.parseInt(request.getParameter("products_number")));
+        ps.setDouble(2, Double.parseDouble(request.getParameter("selling_price")));
+        ps.setString(3, request.getParameter("UPC"));
+        PreparedStatement get_upc_prom = connection.prepareStatement("SELECT UPC_prom FROM store_product WHERE UPC = ?");
+        get_upc_prom.setString(1, request.getParameter("UPC"));
         try {
+            ResultSet prom = get_upc_prom.executeQuery();
+            prom.next();
+            String promotionalUPC = prom.getString("UPC_prom");
+
             ps.execute();
-            //response.sendRedirect("/products.jsp");
-            response.setStatus(200);
+            String stat_prom = "UPDATE Store_product SET products_number = ?, selling_price = ? WHERE UPC = ?";
+            PreparedStatement ps_prom = connection.prepareStatement(stat_prom);
+            ps_prom.setInt(1, Integer.parseInt(request.getParameter("products_number")));
+            ps_prom.setDouble(2, Double.parseDouble(request.getParameter("selling_price")) * 0.8);
+            ps_prom.setString(3, promotionalUPC);
+            try {
+
+                ps_prom.execute();
+                response.setStatus(200);
+            } catch (Exception e) {
+                System.out.println("====================" + e);
+                PrintWriter out = response.getWriter();
+                out.print("Cannot update promotional Store product, please, enter valid information!");
+                response.setStatus(500);
+            }
+
         } catch (Exception e) {
             System.out.println("====================" + e);
             PrintWriter out = response.getWriter();
-            out.print("Cannot update product, connected to the group");
+            out.print("Cannot update Store product, please, enter valid information!");
             response.setStatus(500);
         }
 
@@ -214,7 +233,7 @@ public class StoreProducts extends HttpServlet {
 
     }
     private void del_promotional(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-        PreparedStatement ps = connection.prepareStatement("DELETE FROM Store_product WHERE UPC=?");
+        PreparedStatement ps = connection.prepareStatement("UPDATE Store_product SET upc_prom=NULL WHERE UPC=?");
         ps.setString(1,request.getParameter("UPC"));
         try {
             ps.execute();
