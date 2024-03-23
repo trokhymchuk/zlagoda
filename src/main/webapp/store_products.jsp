@@ -1,0 +1,139 @@
+<%@ page import="java.io.*,java.util.*,java.sql.*" %>
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ page contentType="text/html;charset=utf-8" %>
+
+<jsp:include page="header.jsp" />
+<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
+                   url="jdbc:postgresql://127.0.0.1:5432/ais"
+                   user="postgres" password="admin"/>
+
+<sql:query dataSource="${snapshot}" var="result">
+    SELECT * from Store_product ORDER BY id_product, promotional_product;
+</sql:query>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#UPC</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Products number</th>
+            <th scope="col">Promotional</th>
+            <th scope="col">Delete</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="row" items="${result.rows}">
+            <sql:query dataSource="${snapshot}" var="productName">
+                SELECT product_name from Product WHERE id_product='${row.id_product}';
+            </sql:query>
+
+            <tr>
+                <th scope="row"><c:out value="${row.UPC}"/></th>
+                <td><c:out value="${productName.rows[0].product_name}"/></td>
+                <td><c:out value="${row.selling_price}"/></td>
+                <td><c:out value="${row.products_number}"/></td>
+
+                <td>
+                    <c:choose>
+                        <c:when test="${row.promotional_product}">
+                            <button type="button" class="btn btn-outline-secondary" disabled>Promotional</button>
+                        </c:when>
+                        <c:otherwise>
+                            <c:choose>
+                                <c:when test="${row.UPC_prom == null}">
+                                    <button type="button" onclick="add_promotional('${row.UPC}')"
+                                            class="btn btn-success">Add promotional
+                                    </button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="button" onclick="del_promotional('${row.UPC_prom}')"
+                                            class="btn btn-danger">Del promotional
+                                    </button>
+                                </c:otherwise>
+                            </c:choose>
+
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+                <td>
+                    <button onclick="remove_store_product('${row.UPC}')" type="button" class="btn btn-danger"><i
+                            class="fa-solid fa-trash"
+                    ></i>
+                    </button>
+
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+
+</div>
+<script>
+    function remove_store_product(UPC) {
+        $.ajax({
+            url: '/store_product',
+            method: 'get',
+            dataType: 'html',
+            data: {UPC: UPC, action: "delete"},
+            success: function (data) {
+                console.log(data);
+          //      alert("The product was deleted successfully!");
+                window.location.replace("http://localhost:8080/store_products.jsp");
+
+            },
+            error: function (jqXHR, exception) {
+                alert("Could not delete product: " + jqXHR.responseText);
+                console.log(jqXHR);
+                console.log(exception);
+            }
+        });
+
+    }
+
+    function add_promotional(UPC) {
+        $.ajax({
+            url: '/store_product',
+            method: 'get',
+            dataType: 'html',
+            data: {UPC: UPC, action: "add_promotional"},
+            success: function (data) {
+                console.log(data);
+         //       alert("The product was deleted successfully!");
+                window.location.replace("http://localhost:8080/store_products.jsp");
+            },
+            error: function (jqXHR, exception) {
+                alert("Could not delete product: " + jqXHR.responseText);
+                console.log(jqXHR);
+                console.log(exception);
+            }
+        });
+
+    }
+
+    function del_promotional(UPC) {
+        $.ajax({
+            url: '/store_product',
+            method: 'get',
+            dataType: 'html',
+            data: {UPC: UPC, action: "del_promotional"},
+            success: function (data) {
+                console.log(data);
+       //         alert("The product was deleted successfully!");
+                window.location.replace("http://localhost:8080/store_products.jsp");
+            },
+            error: function (jqXHR, exception) {
+                alert("Could not delete product: " + jqXHR.responseText);
+                console.log(jqXHR);
+                console.log(exception);
+            }
+        });
+
+    }
+
+</script>
+
+<jsp:include page="footer.jsp" />

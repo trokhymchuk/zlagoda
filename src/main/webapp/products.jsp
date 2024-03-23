@@ -1,42 +1,72 @@
-<%@ page import = "java.io.*,java.util.*,java.sql.*"%>
-<%@ page import = "javax.servlet.http.*,javax.servlet.*" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix = "sql"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*" %>
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ page contentType="text/html;charset=utf-8" %>
 
-<html>
-<head>
-    <title>SELECT Operation</title>
-</head>
+<jsp:include page="header.jsp" />
+<sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
+                   url="jdbc:postgresql://127.0.0.1:5432/ais"
+                   user="postgres" password="admin"/>
 
-<body>
-<sql:setDataSource var = "snapshot" driver = "org.postgresql.Driver"
-                   url = "jdbc:postgresql://127.0.0.1:5432/ais"
-                   user = "postgres"  password = "admin"/>
-
-<sql:query dataSource = "${snapshot}" var = "result">
-    SELECT * from Product;
+<sql:query dataSource="${snapshot}" var="result">
+    SELECT * from Product ORDER BY id_product;
 </sql:query>
 
-<table border = "1" width = "100%">
-    <tr>
-        <th>ID product</th>
-        <th>Name</th>
-        <th>Characteristics</th>
-        <th>Edit</th>
-        <th>Delete</th>
-
-    </tr>
-
-    <c:forEach var = "row" items = "${result.rows}">
+<div class="container">
+    <table class="table">
+        <thead>
         <tr>
-            <td><c:out value = "${row.id_product}"/></td>
-            <td><c:out value = "${row.product_name}"/></td>
-            <td><c:out value = "${row.characteristics}"/></td>
-            <td><a href="edit_product.jsp?id=${row.id_product}">edit</a></td>
-            <td><a href="/product?id=${row.id_product}&action=delete">delete</a></td>
-        </tr>
-    </c:forEach>
-</table>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Characteristics</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
 
-</body>
-</html>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="row" items="${result.rows}">
+            <tr>
+                <th scope="row"><c:out value="${row.id_product}"/></th>
+                <td><c:out value="${row.product_name}"/></td>
+                <td><c:out value="${row.characteristics}"/></td>
+                <td>
+                    <a class="btn btn-primary" href="edit_product.jsp?id=${row.id_product}"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
+                </td>
+                <td>
+                    <button onclick="remove_product('${row.id_product}')" type="button" class="btn btn-danger"><i
+                            class="fa-solid fa-trash"
+                    ></i>
+                    </button>
+
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+
+</div>
+<script>
+    function remove_product(product_id) {
+        $.ajax({
+            url: '/product',
+            method: 'get',
+            dataType: 'html',
+            data: {id: product_id, action: "delete"},
+            success: function (data) {
+                console.log(data);
+                alert("The product was deleted successfully!");
+            },
+            error: function (jqXHR, exception) {
+                alert("Could not delete product: " + jqXHR.responseText);
+                //console.log(exception);
+                //alert(jqXHR.text);
+            }
+        });
+
+    }
+</script>
+
+<jsp:include page="footer.jsp" />
