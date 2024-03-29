@@ -1,5 +1,5 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
-<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<%@ page import="jakarta.servlet.http.*,jakarta.servlet.*" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
@@ -7,45 +7,46 @@
 <jsp:include page="header.jsp" />
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
-                   user="postgres" password="admin"/>
+                   user="Kate" password=""/>
+<%--user="postgres" password="admin"/>--%>
 
 
 
 <sql:query dataSource="${snapshot}" var="categories">
-    SELECT * from Category;
+SELECT * from Category;
 </sql:query>
 
 
 <div class="container">
 
     <form action="javascript:submit();">
-        <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
-            <div class="col-sm-10">
-                <input type="text" name="name" class="form-control" id="inputEmail3"
-                       value="">
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label for="inputPassword3" class="col-sm-2 col-form-label">Category</label>
-            <div class="col-sm-10">
-                <select id="inputPassword3" name="category" class="form-select">
-                    <c:forEach var="row" items="${categories.rows}">
-                        <option value="${row.category_number}">${row.category_name}</option>
-                    </c:forEach>
-                </select>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Characteristics</label>
-            <textarea name="characteristics" class="form-control" id="exampleFormControlTextarea1"
-                      rows="3"></textarea>
-        </div>
+    <div class="row mb-3">
+    <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+    <div class="col-sm-10">
+    <input type="text" name="name" class="form-control" id="inputEmail3"
+        value="">
+</div>
+</div>
+<div class="row mb-3">
+<label for="inputPassword3" class="col-sm-2 col-form-label">Category</label>
+<div class="col-sm-10">
+<select id="inputPassword3" name="category" class="form-select">
+ <c:forEach var="row" items="${categories.rows}">
+     <option value="${row.category_number}">${row.category_name}</option>
+ </c:forEach>
+</select>
+</div>
+</div>
+<div class="mb-3">
+<label for="exampleFormControlTextarea1" class="form-label">Characteristics</label>
+<textarea name="characteristics" class="form-control" id="exampleFormControlTextarea1"
+   rows="3"></textarea>
+</div>
 
-        <button type="submit" class="btn btn-primary">Edit</button>
-    </form>
+<button type="submit" class="btn btn-primary">Edit</button>
+</form>
 
-    <%--    <table class="table">--%>
+<%--    <table class="table">--%>
     <%--        <thead>--%>
     <%--        <tr>--%>
     <%--            <th scope="col">#</th>--%>
