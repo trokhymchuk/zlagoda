@@ -59,6 +59,7 @@
             success: function (data) {
                 console.log(data);
                 alert("The product was deleted successfully!");
+                window.location.replace("http://localhost:8080/products.jsp");
             },
             error: function (jqXHR, exception) {
                 alert("Could not delete product: " + jqXHR.responseText);

@@ -43,7 +43,7 @@ SELECT * from Category;
    rows="3"></textarea>
 </div>
 
-<button type="submit" class="btn btn-primary">Edit</button>
+<button type="submit" class="btn btn-primary">Add</button>
 </form>
 
 <%--    <table class="table">--%>
