@@ -11,12 +11,6 @@
   String postgres_password = (String) request.getAttribute("postgres_password");
 
 %>
-<jsp:include page="DB.jsp" />
-<%
-  String potsgres_username = (String) request.getAttribute("potsgres_username");
-  String postgres_password = (String) request.getAttribute("postgres_password");
-
-%>
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/><sql:query dataSource="${snapshot}" var="result">
