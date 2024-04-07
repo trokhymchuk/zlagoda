@@ -4,11 +4,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 
+
 <jsp:include page="header.jsp" />
+<jsp:include page="DB.jsp" />
+<%
+  String potsgres_username = (String) request.getAttribute("potsgres_username");
+  String postgres_password = (String) request.getAttribute("postgres_password");
+
+%>
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
-                   user="Kate" password=""/>
-<%--user="postgres" password="admin"/>--%>
+                   user="<%=potsgres_username%>" password="<%=postgres_password%>"/>
 
 
 <div class="container">

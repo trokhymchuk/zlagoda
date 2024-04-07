@@ -5,12 +5,21 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 
 <jsp:include page="header.jsp" />
+<jsp:include page="DB.jsp" />
+<%
+  String potsgres_username = (String) request.getAttribute("potsgres_username");
+  String postgres_password = (String) request.getAttribute("postgres_password");
+
+%>
+<jsp:include page="DB.jsp" />
+<%
+  String potsgres_username = (String) request.getAttribute("potsgres_username");
+  String postgres_password = (String) request.getAttribute("postgres_password");
+
+%>
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
-                   user="Kate" password=""/>
-<%--user="postgres" password="admin"/>--%>
-
-<sql:query dataSource="${snapshot}" var="result">
+                   user="<%=potsgres_username%>" password="<%=postgres_password%>"/><sql:query dataSource="${snapshot}" var="result">
   SELECT * from Employee ORDER BY id_employee;
 </sql:query>
 

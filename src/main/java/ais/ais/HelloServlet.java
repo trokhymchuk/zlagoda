@@ -12,8 +12,9 @@ import java.sql.*;
 public class HelloServlet extends HttpServlet {
     private String message;
     static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/ais";
-    static final String USER = "Kate";//"postgres";
-    static final String PASS = "";//"admin";
+    static final String USER = DB.username;//"postgres";
+    static final String PASS = DB.password;//"admin";
+
     Connection connection;
 
     public void init() {
