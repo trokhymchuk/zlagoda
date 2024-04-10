@@ -84,6 +84,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Phone number</label>
       <div class="col-sm-10">
         <input type="tel" name="phone_number" class="form-control"
+               pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+               title="Please enter phone number in the format xxx-xxx-xxxx"
                value="${result.rows[0].phone_number}">
       </div>
     </div>
