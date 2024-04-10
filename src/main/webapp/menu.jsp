@@ -61,6 +61,16 @@
                             <li><a class="dropdown-item" href="/add_employee.jsp">Додати</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Customer card
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/customer_card.jsp">List</a></li>
+                            <li><a class="dropdown-item" href="/add_customer_card.jsp">Add</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                     </li>
