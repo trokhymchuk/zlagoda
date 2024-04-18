@@ -24,11 +24,11 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Продукти
+                            Products
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/products.jsp">Cписок</a></li>
-                            <li><a class="dropdown-item" href="/add_product.jsp">Додати</a></li>
+                            <li><a class="dropdown-item" href="/products.jsp">List</a></li>
+                            <li><a class="dropdown-item" href="/add_product.jsp">Add</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -49,6 +49,16 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/categories.jsp">List</a></li>
                             <li><a class="dropdown-item" href="/add_category.jsp">Add</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Receipts
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/reciepts.jsp">List</a></li>
+                            <li><a class="dropdown-item" href="/add_reciept.jsp">Add</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
