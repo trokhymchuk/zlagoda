@@ -114,6 +114,12 @@ public class CustomerCard extends HttpServlet {
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        int percent = Integer.parseInt(request.getParameter("percent"));
+        if (percent < 0 || percent > 100) {
+            response.getWriter().print("Percent must be between 0 and 100");
+            response.setStatus(400);
+            return;
+        }
         String stat = "UPDATE Customer_Card SET cust_surname = ?, cust_name = ?, cust_patronymic = ?, phone_number = ?, city = ?, street = ?, zip_code = ?, percent = ? WHERE card_number = ?";
         PreparedStatement ps = connection.prepareStatement(stat);
         ps.setString(1, request.getParameter("cust_surname"));
@@ -150,6 +156,12 @@ public class CustomerCard extends HttpServlet {
     }
 
     private void add(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        int percent = Integer.parseInt(request.getParameter("percent"));
+        if (percent < 0 || percent > 100) {
+            response.getWriter().print("Percent must be between 0 and 100");
+            response.setStatus(400);
+            return;
+        }
         String stat = "INSERT INTO Customer_Card (card_number, cust_surname, cust_name, cust_patronymic, phone_number, city, street, zip_code, percent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(stat);
         ps.setString(1, request.getParameter("card_number"));

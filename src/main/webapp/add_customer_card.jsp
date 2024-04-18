@@ -31,6 +31,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Surname</label>
       <div class="col-sm-10">
         <input type="text" name="cust_surname" class="form-control"
+<%--               pattern="[A-Za-z]+(-[A-Za-z]+)?"--%>
+<%--               title="Please enter Surname using only letters or format abc-abc"--%>
                value="">
       </div>
     </div>
@@ -39,6 +41,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
       <div class="col-sm-10">
         <input type="text" name="cust_name" class="form-control" id="inputEmail3"
+<%--               pattern="[A-Za-z]+(-[A-Za-z]+)?"--%>
+<%--               title="Please enter Name using only letters or format abc-abc"--%>
                value="">
       </div>
     </div>
@@ -47,6 +51,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Patronymic</label>
       <div class="col-sm-10">
         <input type="text" name="cust_patronymic" class="form-control"
+<%--               pattern="[A-Za-z]+(-[A-Za-z]+)?"--%>
+<%--               title="Please enter Patronymic using only letters or format abc-abc"--%>
                value="">
       </div>
     </div>
@@ -55,6 +61,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Phone number</label>
       <div class="col-sm-10">
         <input type="tel" name="phone_number" class="form-control"
+               pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+               title="Please enter phone number in the format xxx-xxx-xxxx"
                value="">
       </div>
     </div>
@@ -63,6 +71,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">City</label>
       <div class="col-sm-10">
         <input type="text" name="city" class="form-control"
+               pattern="^[A-Za-z\s'-]+$"
+               title="City name may only include letters, spaces, hyphens, and apostrophes."
                value="">
       </div>
     </div>
@@ -71,6 +81,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Street</label>
       <div class="col-sm-10">
         <input type="text" name="street" class="form-control"
+<%--               pattern="^[0-9A-Za-z\s.,'-]+$"--%>
+<%--               title="Street name may include numbers, letters, spaces, periods, commas, hyphens, and apostrophes."--%>
                value="">
       </div>
     </div>
@@ -79,6 +91,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Zip code</label>
       <div class="col-sm-10">
         <input type="text" name="zip_code" class="form-control"
+               pattern="^\d{5}$"
+               title="Zip code must be exactly 5 digits."
                value="">
       </div>
     </div>
@@ -87,6 +101,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Percent</label>
       <div class="col-sm-10">
         <input type="number" name="percent" class="form-control"
+               min="0" max="100"
+               title="Please enter a percent value between 0 and 100."
                value="">
       </div>
     </div>
