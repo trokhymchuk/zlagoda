@@ -6,6 +6,8 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.sql.*;
 
 @WebServlet(name = "Employee", value = "/employee")
@@ -181,7 +183,7 @@ public class Employee extends HttpServlet {
     }
 
     private void add(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-        String stat = "INSERT INTO Employee (id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary, date_of_birth, date_of_start, phone_number, city, street, zip_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String stat = "INSERT INTO Employee (id_employee, empl_surname, empl_name, empl_patronymic, empl_role, salary, date_of_birth, date_of_start, phone_number, city, street, zip_code, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sha256('" + request.getParameter("password") +"'))";
         PreparedStatement ps = connection.prepareStatement(stat);
         ps.setString(1, request.getParameter("id"));
         ps.setString(2, request.getParameter("surname"));
@@ -199,6 +201,7 @@ public class Employee extends HttpServlet {
             ps.execute();
             response.setStatus(200);
         } catch (Exception e) {
+            System.out.println("============" + e);
             PrintWriter out = response.getWriter();
             out.print("Cannot add employee");
             response.setStatus(500);

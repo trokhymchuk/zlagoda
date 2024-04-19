@@ -52,6 +52,13 @@
              value="">
     </div>
   </div>
+    <div class="row mb-3">
+      <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>
+      <div class="col-sm-10">
+        <input type="password" name="password" class="form-control"
+               value="">
+      </div>
+    </div>
 
   <div class="row mb-3">
     <label for="inputEmail3" class="col-sm-2 col-form-label">Role</label>
@@ -141,6 +148,7 @@
           name: $('input[name="name"]').val().trim(),
           patronymic: $('input[name="patronymic"]').val().trim(),
           role:$('input[name="role"]:checked').val(),
+          password: $('input[name="password"]').val().trim(),
           salary: $('input[name="salary"]').val().trim(),
           date_of_birth: $('input[name="date_of_birth"]').val().trim(),
           date_of_start: $('input[name="date_of_start"]').val().trim(),
