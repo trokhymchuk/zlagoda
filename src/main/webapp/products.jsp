@@ -15,7 +15,8 @@
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/>
 <sql:query dataSource="${snapshot}" var="result">
-    SELECT * from Product ORDER BY id_product;
+<%--    9th  --%>
+    SELECT * from Product ORDER BY product_name;
 </sql:query>
 
 <div class="container">
