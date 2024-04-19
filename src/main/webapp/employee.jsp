@@ -25,10 +25,8 @@
       <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
     </div>
   </form>
-  <div class="row mb-3">
-    <div class="col-sm-12">
-      <p><span id="zip_code"></span></p>
-    </div>
+  <div id="result">
+  </div>
   <table class="table">
     <thead>
     <tr>
@@ -112,7 +110,11 @@
       dataType: 'json',
       data: {surname: surname, action: "search"},
       success: function (response) {
-        document.getElementById('zip_code').innerText = "Phone number: "+response.number+"\nCity: "+response.city+"\nStreet: "+response.street+"\nZip-code: "+response.zip_code;
+        var resultHtml = "<table class='table'>";
+        resultHtml += "<thead><tr><th scope='col'>Phone number</th><th scope='col'>City</th><th scope='col'>Street</th><th scope='col'>Zip-code</th></tr></thead><tbody>";
+        resultHtml += "<tr><td>" + response.number + "</td><td>" + response.city + "</td><td>" + response.street + "</td><td>" + response.zip_code + "</td></tr>";
+        resultHtml += "</tbody></table>";
+        document.getElementById('result').innerHTML = resultHtml;
       },
       error: function (jqXHR, exception) {
         alert("Could not fetch employees: " + jqXHR.responseText);
