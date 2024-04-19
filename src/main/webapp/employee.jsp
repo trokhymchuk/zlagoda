@@ -18,6 +18,17 @@
 </sql:query>
 
 <div class="container">
+
+  <form id="searchForm">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Enter surname" name="surname" id="surname">
+      <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
+    </div>
+  </form>
+  <div class="row mb-3">
+    <div class="col-sm-12">
+      <p><span id="zip_code"></span></p>
+    </div>
   <table class="table">
     <thead>
     <tr>
@@ -89,6 +100,24 @@
       }
     });
 
+  }
+</script>
+
+<script>
+  function search() {
+    var surname = document.getElementById("surname").value;
+    $.ajax({
+      url: '/employee',
+      method: 'get',
+      dataType: 'json',
+      data: {surname: surname, action: "search"},
+      success: function (response) {
+        document.getElementById('zip_code').innerText = "Phone number: "+response.number+"\nCity: "+response.city+"\nStreet: "+response.street+"\nZip-code: "+response.zip_code;
+      },
+      error: function (jqXHR, exception) {
+        alert("Could not fetch employees: " + jqXHR.responseText);
+      }
+    });
   }
 </script>
 
