@@ -4,11 +4,9 @@ import java.io.*;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.*;
-import java.util.Random;
 
 @WebServlet(name = "Employee", value = "/employee")
 public class Employee extends HttpServlet {
@@ -71,6 +69,8 @@ public class Employee extends HttpServlet {
                 add(request, response);
             if (action.equals("search"))
                 search(request, response);
+            if (action.equals("listCashiersSortedBySurname"))
+                listCashiersSortedBySurname(request, response);
         } catch (Exception e) {
             response.setStatus(504);
         }
@@ -237,4 +237,35 @@ public class Employee extends HttpServlet {
             response.setStatus(500);
         }
     }
+
+    //6
+    private void listCashiersSortedBySurname(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT * FROM Employee WHERE empl_role = 'Cashier' ORDER BY empl_surname ASC");
+        StringBuilder resp = new StringBuilder();
+        while (rs.next()) {
+            String id = rs.getString("id_employee");
+            String employee_surname = rs.getString("employee_surname");
+            String employee_name = rs.getString("employee_name");
+            String patronymic = rs.getString("patronymic");
+            String role = rs.getString("role");
+            Double salary = rs.getDouble("salary");
+            Date dateOfBirth = rs.getDate("date_of_birth");
+            Date dateOfStart = rs.getDate("date_of_start");
+            String phoneNumber = rs.getString("phoneNumber");
+            String city = rs.getString("city");
+            String street = rs.getString("street");
+            String zipCode = rs.getString("zipCode");
+            resp.append(id).append(" ").append(employee_surname).append(" ").append(employee_name).append(" ")
+                    .append(patronymic).append(" ").append(role).append(" ").append(salary).append(" ")
+                    .append(dateOfBirth).append(" ").append(dateOfStart).append(" ").append(phoneNumber).append(" ")
+                    .append(city).append(" ").append(street).append(" ").append(zipCode).append("<br>");
+        }
+        PrintWriter out = response.getWriter();
+        out.println("<html><body>");
+        out.println("<h1>Cashiers</h1>");
+        out.println("<div>" + resp.toString() + "</div>");
+        out.println("</body></html>");
+    }
+
 }
