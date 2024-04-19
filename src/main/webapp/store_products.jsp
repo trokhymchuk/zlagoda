@@ -18,6 +18,15 @@
     SELECT * from Store_product ORDER BY id_product, promotional_product;
 </sql:query>
 <div class="container">
+    <form id="searchForm">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Enter UPC" name="upc" id="upc">
+            <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
+        </div>
+    </form>
+
+    <div id="result">
+    </div>
     <table class="table">
         <thead>
         <tr>
@@ -152,6 +161,28 @@
 
     }
 
+    function search() {
+        var upc = document.getElementById("upc").value;
+        $.ajax({
+            url: '/store_product',
+            method: 'get',
+            dataType: 'json',
+            data: {upc: upc, action: "search"},
+            success: function (response) {
+                var resultHtml = "<table class='table'>";
+                resultHtml += "<thead><tr><th scope='col'>Product Name</th><th scope='col'>Price</th><th scope='col'>Products number</th><th scope='col'>Characteristics</th></tr></thead><tbody>";
+                resultHtml += "<tr><td>" + response.product_name + "</td><td>" + response.selling_price + "</td><td>" + response.products_number + "</td><td>" + response.characteristics + "</td></tr>";
+                resultHtml += "</tbody></table>";
+                document.getElementById('result').innerHTML = resultHtml;
+                    },
+            error: function (jqXHR, exception) {
+                alert("Could not search product: " + jqXHR.responseText);
+            }
+        });
+    }
+
+
 </script>
+
 
 <jsp:include page="footer.jsp"/>

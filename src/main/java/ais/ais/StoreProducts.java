@@ -4,6 +4,7 @@ import java.io.*;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.json.JSONObject;
 
 import java.sql.*;
 import java.util.Random;
@@ -71,7 +72,8 @@ public class StoreProducts extends HttpServlet {
                 add_promotional(request, response);
             if (action.equals("del_promotional"))
                 del_promotional(request, response);
-
+            if (action.equals("search"))
+                search(request, response);
         } catch (Exception e) {
             response.setStatus(504);
         }
@@ -245,6 +247,38 @@ public class StoreProducts extends HttpServlet {
             response.setStatus(500);
         }
 
+    }
+
+    private void search(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT product_name, selling_price, products_number, characteristics FROM Store_Product INNER JOIN Product ON Store_Product.id_product=Product.id_product WHERE UPC = ?");
+            statement.setString(1, request.getParameter("upc")); // Зверніть увагу на параметр "surname"
+            ResultSet resultSet = statement.executeQuery();
+            JSONObject jsonResponse = new JSONObject();
+            if (resultSet.next()) {
+                String product_name = resultSet.getString("product_name");
+                String selling_price = resultSet.getString("selling_price");
+                String products_number = resultSet.getString("products_number");
+                String characteristics = resultSet.getString("characteristics");
+
+                jsonResponse.put("product_name", product_name);
+                jsonResponse.put("selling_price", selling_price);
+                jsonResponse.put("products_number", products_number);
+                jsonResponse.put("characteristics", characteristics);
+            }
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print(jsonResponse.toString());
+            out.flush();
+            response.setStatus(200);
+        } catch (SQLException e) {
+            System.out.println("====================" + e);
+            PrintWriter out = response.getWriter();
+            out.print("Cannot execute search");
+            response.setStatus(500);
+        }
     }
 
 }
