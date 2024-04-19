@@ -56,8 +56,14 @@
   <div class="row mb-3">
     <label for="inputEmail3" class="col-sm-2 col-form-label">Role</label>
     <div class="col-sm-10">
-      <input type="text" name="role" class="form-control"
-             value="">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="role" id="cashier" value="Cashier">
+        <label class="form-check-label" for="cashier">Cashier</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="role" id="manager" value="Manager">
+        <label class="form-check-label" for="manager">Manager</label>
+      </div>
     </div>
   </div>
 
@@ -65,7 +71,7 @@
     <label for="inputEmail3" class="col-sm-2 col-form-label">Salary</label>
     <div class="col-sm-10">
       <input type="number" name="salary" class="form-control"
-             value="">
+             value="" min="0">
     </div>
   </div>
 
@@ -134,7 +140,7 @@
           surname: $('input[name="surname"]').val().trim(),
           name: $('input[name="name"]').val().trim(),
           patronymic: $('input[name="patronymic"]').val().trim(),
-          role: $('input[name="role"]').val().trim(),
+          role:$('input[name="role"]:checked').val(),
           salary: $('input[name="salary"]').val().trim(),
           date_of_birth: $('input[name="date_of_birth"]').val().trim(),
           date_of_start: $('input[name="date_of_start"]').val().trim(),
