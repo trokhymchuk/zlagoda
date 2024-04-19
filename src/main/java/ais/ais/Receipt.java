@@ -66,6 +66,8 @@ public class Receipt extends HttpServlet {
                 add(request, response);
             if (action.equals("delete"))
                 delete(request, response);
+            if (action.equals("getTotalSum"))
+                getTotalSum(request, response);
         } catch (Exception e) {
             response.setStatus(504);
         }
@@ -155,5 +157,31 @@ public class Receipt extends HttpServlet {
             response.setStatus(500);
         }
 
+    }
+
+    private void getTotalSum(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        double totalSum = 0;
+
+        try {
+            String sql = "SELECT SUM(sum_total) FROM checktable WHERE print_date BETWEEN ? AND ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setDate(1, Date.valueOf(request.getParameter("startDate")));
+            statement.setDate(2, Date.valueOf(request.getParameter("endDate")));
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                totalSum = resultSet.getDouble(1);
+            }
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print("{\"totalSum\": " + totalSum + "}");
+            out.flush();
+            response.setStatus(200);
+        } catch (SQLException e) {
+            System.out.println("====================" + e);
+            PrintWriter out = response.getWriter();
+            out.print("Cannot get SUM");
+            response.setStatus(500);
+        }
     }
 }

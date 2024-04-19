@@ -26,7 +26,7 @@
             <th scope="col">Employee</th>
             <th scope="col">Customer</th>
             <th scope="col">Date</th>
-            <th scope="col">Amount</th>
+            <th scope="col">Sum</th>
             <th scope="col">VAT</th>
             <th scope="col">Delete</th>
 
@@ -54,6 +54,29 @@
         </tbody>
     </table>
 
+
+    <div class="row mb-3">
+        <label for="startDate" class="col-sm-2 col-form-label">Start Date</label>
+        <div class="col-sm-4">
+            <input type="date" id="startDate" name="startDate" class="form-control">
+        </div>
+        <label for="endDate" class="col-sm-2 col-form-label">End Date (exclusive)</label>
+        <div class="col-sm-4">
+            <input type="date" id="endDate" name="endDate" class="form-control">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <button onclick="getTotalSum()" class="btn btn-primary">Get Total Sum</button>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            <p>Total Sum: <span id="totalSum"></span></p>
+        </div>
+    </div>
+
 </div>
 <script>
     function remove(check_number) {
@@ -73,6 +96,25 @@
             }
         });
 
+    }
+</script>
+
+<script>
+    function getTotalSum() {
+        var startDate = document.getElementById('startDate').value;
+        var endDate = document.getElementById('endDate').value;
+        $.ajax({
+            url: '/receipt',
+            method: 'get',
+            dataType: 'json',
+            data: {startDate: startDate, endDate: endDate, action: "getTotalSum"},
+            success: function(response) {
+                document.getElementById('totalSum').innerText = response.totalSum;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            }
+        });
     }
 </script>
 
