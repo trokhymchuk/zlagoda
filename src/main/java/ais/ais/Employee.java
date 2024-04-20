@@ -69,8 +69,6 @@ public class Employee extends HttpServlet {
                 delete(request, response);
             if (action.equals("add"))
                 add(request, response);
-            if (action.equals("search"))
-                search(request, response);
             if (action.equals("listCashiersSortedBySurname"))
                 listCashiersSortedBySurname(request, response);
         } catch (Exception e) {
@@ -204,39 +202,6 @@ public class Employee extends HttpServlet {
             System.out.println("============" + e);
             PrintWriter out = response.getWriter();
             out.print("Cannot add employee");
-            response.setStatus(500);
-        }
-    }
-
-    private void search(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-        try {
-            String sql = "SELECT phone_number, city, street, zip_code  FROM Employee WHERE empl_surname = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, request.getParameter("surname")); // Зверніть увагу на параметр "surname"
-            ResultSet resultSet = statement.executeQuery();
-            JSONObject jsonResponse = new JSONObject();
-            if (resultSet.next()) {
-                String number = resultSet.getString("phone_number");
-                String city = resultSet.getString("city");
-                String street = resultSet.getString("street");
-                String zip_code = resultSet.getString("zip_code");
-
-                jsonResponse.put("number", number);
-                jsonResponse.put("city", city);
-                jsonResponse.put("street", street);
-                jsonResponse.put("zip_code", zip_code);
-            }
-
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            PrintWriter out = response.getWriter();
-            out.print(jsonResponse.toString());
-            out.flush();
-            response.setStatus(200);
-        } catch (SQLException e) {
-            System.out.println("====================" + e);
-            PrintWriter out = response.getWriter();
-            out.print("Cannot execute search");
             response.setStatus(500);
         }
     }

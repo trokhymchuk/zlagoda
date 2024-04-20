@@ -99,9 +99,7 @@
     });
 
   }
-</script>
 
-<script>
   function search() {
       var surname = document.getElementById("surname").value;
       window.location.href = 'search_employee.jsp?surname=' + surname;

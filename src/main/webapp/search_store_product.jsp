@@ -15,7 +15,7 @@
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/>
 <sql:query dataSource="${snapshot}" var="result">
-    SELECT * from Store_product ORDER BY id_product, promotional_product;
+    SELECT * FROM Store_Product INNER JOIN Product ON Store_Product.id_product=Product.id_product WHERE UPC LIKE '<%= request.getParameter("upc")%>%'ORDER BY product_name;
 </sql:query>
 <div class="container">
     <form id="searchForm">
@@ -34,6 +34,7 @@
             <th scope="col">Product Name</th>
             <th scope="col">Price</th>
             <th scope="col">Products number</th>
+            <th scope="col">Characteristics</th>
             <th scope="col">Promotional</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
@@ -51,7 +52,7 @@
                 <td><c:out value="${productName.rows[0].product_name}"/></td>
                 <td><c:out value="${row.selling_price}"/></td>
                 <td><c:out value="${row.products_number}"/></td>
-
+                <td><c:out value="${row.characteristics}"/></td>
                 <td>
                     <c:choose>
                         <c:when test="${row.promotional_product}">
@@ -165,6 +166,7 @@
         var upc = document.getElementById("upc").value;
         window.location.href = 'search_store_product.jsp?upc=' + upc;
     }
+
 </script>
 
 

@@ -15,7 +15,7 @@
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/><sql:query dataSource="${snapshot}" var="result">
-  SELECT * from Employee WHERE empl_surname LIKE '<%= request.getParameter("surname")%>%'ORDER BY empl_surname;
+  SELECT id_employee, empl_surname,empl_name, phone_number, city, street, zip_code  FROM Employee WHERE empl_surname LIKE '<%= request.getParameter("surname")%>%'ORDER BY empl_surname;
 </sql:query>
 
 <div class="container">
@@ -31,14 +31,8 @@
   <table class="table">
     <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">Surname</th>
       <th scope="col">Name</th>
-      <th scope="col">Patronymic</th>
-      <th scope="col">Role</th>
-      <th scope="col">Salary</th>
-      <th scope="col">Date of birth</th>
-      <th scope="col">Date of start</th>
       <th scope="col">Phone number</th>
       <th scope="col">City</th>
       <th scope="col">Street</th>
@@ -51,14 +45,8 @@
     <tbody>
     <c:forEach var="row" items="${result.rows}">
       <tr>
-        <th scope="row"><c:out value="${row.id_employee}"/></th>
-        <td><c:out value="${row.empl_surname}"/></td>
+        <th scope="row"><c:out value="${row.empl_surname}"/></th>
         <td><c:out value="${row.empl_name}"/></td>
-        <td><c:out value="${row.empl_patronymic}"/></td>
-        <td><c:out value="${row.empl_role}"/></td>
-        <td><c:out value="${row.salary}"/></td>
-        <td><c:out value="${row.date_of_birth}"/></td>
-        <td><c:out value="${row.date_of_start}"/></td>
         <td><c:out value="${row.phone_number}"/></td>
         <td><c:out value="${row.city}"/></td>
         <td><c:out value="${row.street}"/></td>
@@ -98,6 +86,13 @@
         //alert(jqXHR.text);
       }
     });
+  }
 
+  function search() {
+    var surname = document.getElementById("surname").value;
+    alert(surname);
+    window.location.href = 'search_employee.jsp?surname=' + surname;
   }
 </script>
+
+<jsp:include page="footer.jsp"/>
