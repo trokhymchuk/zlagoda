@@ -11,10 +11,11 @@
   String postgres_password = (String) request.getAttribute("postgres_password");
 
 %>
+
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/><sql:query dataSource="${snapshot}" var="result">
-  SELECT * from Employee ORDER BY empl_surname;
+  SELECT * from Employee WHERE empl_surname LIKE '<%= request.getParameter("surname")%>%'ORDER BY empl_surname;
 </sql:query>
 
 <div class="container">
@@ -100,12 +101,3 @@
 
   }
 </script>
-
-<script>
-  function search() {
-      var surname = document.getElementById("surname").value;
-      window.location.href = 'search_employee.jsp?surname=' + surname;
-  }
-</script>
-
-<jsp:include page="footer.jsp" />
