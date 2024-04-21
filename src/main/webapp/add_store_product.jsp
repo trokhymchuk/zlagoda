@@ -78,7 +78,7 @@
         <div class="row mb-3">
             <label for="inputEmail4" class="col-sm-2 col-form-label">Selling price</label>
             <div class="col-sm-10">
-                <input type="number" step="0.0001" min="0" name="selling_price" class="form-control" id="inputEmail4"
+                <input type="number" step="0.0001" min="0.01" name="selling_price" class="form-control" id="inputEmail4"
                        value="">
             </div>
         </div>

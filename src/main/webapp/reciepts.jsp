@@ -33,7 +33,7 @@
 
         </tr>
         </thead>
-        <tbody>
+        <tbody id="recieptsTbody">
         <c:forEach var="row" items="${result.rows}">
             <tr>
                 <th scope="row"><c:out value="${row.check_number}"/></th>
@@ -101,20 +101,12 @@
 
 <script>
     function getTotalSum() {
-        var startDate = document.getElementById('startDate').value;
-        var endDate = document.getElementById('endDate').value;
-        $.ajax({
-            url: '/receipt',
-            method: 'get',
-            dataType: 'json',
-            data: {startDate: startDate, endDate: endDate, action: "getTotalSum"},
-            success: function(response) {
-                document.getElementById('totalSum').innerText = response.totalSum;
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.responseText);
-            }
+        let total_sum = 0;
+        $('tbody').children().each(function () {
+            total_sum += +($(this).children(":nth-child(5)").text())
         });
+        $("#totalSum").text(total_sum)
+
     }
 </script>
 

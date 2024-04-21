@@ -15,7 +15,7 @@
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/>
 <sql:query dataSource="${snapshot}" var="result">
-    SELECT * from Store_product ORDER BY products_number, promotional_product ASC;
+    SELECT * from Store_product WHERE promotional_product=false ORDER BY products_number;
 </sql:query>
 <div class="container">
     <form id="searchForm">
@@ -109,7 +109,7 @@
             success: function (data) {
                 console.log(data);
                 //      alert("The product was deleted successfully!");
-                window.location.replace("http://localhost:8080/store_products.jsp");
+                window.location.replace("http://localhost:8080/regular_store_products.jsp");
 
             },
             error: function (jqXHR, exception) {
@@ -130,7 +130,7 @@
             success: function (data) {
                 console.log(data);
                 //       alert("The product was deleted successfully!");
-                window.location.replace("http://localhost:8080/store_products.jsp");
+                window.location.replace("http://localhost:8080/regular_store_products.jsp");
             },
             error: function (jqXHR, exception) {
                 alert("Could not delete product: " + jqXHR.responseText);
@@ -150,7 +150,7 @@
             success: function (data) {
                 console.log(data);
                 //         alert("The product was deleted successfully!");
-                window.location.replace("http://localhost:8080/store_products.jsp");
+                window.location.replace("http://localhost:8080/regular_store_products.jsp");
             },
             error: function (jqXHR, exception) {
                 alert("Could not delete product: " + jqXHR.responseText);
@@ -163,8 +163,25 @@
 
     function search() {
         var upc = document.getElementById("upc").value;
-        window.location.href = 'search_store_product.jsp?upc=' + upc;
+        $.ajax({
+            url: '/store_product',
+            method: 'get',
+            dataType: 'json',
+            data: {upc: upc, action: "search"},
+            success: function (response) {
+                var resultHtml = "<table class='table'>";
+                resultHtml += "<thead><tr><th scope='col'>Product Name</th><th scope='col'>Price</th><th scope='col'>Products number</th><th scope='col'>Characteristics</th></tr></thead><tbody>";
+                resultHtml += "<tr><td>" + response.product_name + "</td><td>" + response.selling_price + "</td><td>" + response.products_number + "</td><td>" + response.characteristics + "</td></tr>";
+                resultHtml += "</tbody></table>";
+                document.getElementById('result').innerHTML = resultHtml;
+                    },
+            error: function (jqXHR, exception) {
+                alert("Could not search product: " + jqXHR.responseText);
+            }
+        });
     }
+
+
 </script>
 
 

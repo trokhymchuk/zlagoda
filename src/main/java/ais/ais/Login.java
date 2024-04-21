@@ -71,6 +71,7 @@ public class Login extends HttpServlet {
                 System.out.println("Pass: " + rs.getString("password").trim() + "|");
                 if(hash.getString(1).trim().equals(rs.getString("password").trim())) {
                     response.addCookie(new Cookie("role", rs.getString("empl_role")));
+                    response.addCookie(new Cookie("empl_id", request.getParameter("id")));
                     response.setStatus(200);
                     return;
                 }

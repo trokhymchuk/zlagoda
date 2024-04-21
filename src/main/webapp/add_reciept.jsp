@@ -15,26 +15,26 @@
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/>
 <sql:query dataSource="${snapshot}" var="result">
-    SELECT UPC, product_name, selling_price, products_number from Product INNER JOIN Store_Product ON Product.id_product=Store_product.id_product;
+    SELECT UPC, product_name, selling_price, products_number from Product INNER JOIN Store_Product ON Product.id_product=Store_product.id_product WHERE products_number>1 AND UPC_prom IS NULL AND UPC IN (SELECT UPC FROM Product WHERE promotional_product=false OR UPC IN (SELECT UPC_prom FROM Store_product));
 </sql:query>
-
+<sql:query dataSource="${snapshot}" var="customers">
+    SELECT * from Customer_card;
+</sql:query>
 <div class="container">
 
     <form action="javascript:submit();">
-        <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Employee ID:</label>
-            <div class="col-sm-10">
-                <input type="text" name="empl_id" class="form-control" id="inputEmail3"
-                       value="">
-            </div>
+        <div class="input-group mb-3">
+            <select id="inputPassword3" placeholder="Customer " name="customer_id" class="form-select">
+                <c:forEach var="row" items="${customers.rows}">
+                    <option value="${row.card_number}"><c:out value="${row.cust_name}"/> <c:out value="${row.cust_patronymic.charAt(0)}"/>. <c:out value="${row.cust_surname}"/> </option>
+                </c:forEach>
+            </select>
+
+            <button type="button" class="btn btn-outline-secondary" onclick="update()">Search</button>
         </div>
-        <div class="row mb-3">
-            <label for="inputEmail4" class="col-sm-2 col-form-label">Customer ID:</label>
-            <div class="col-sm-10">
-                <input type="text" name="customer_id" class="form-control" id="inputEmail4"
-                       value="">
-            </div>
-        </div>
+        <input type="hidden" name="empl_id" class="form-control" id="inputEmail3"
+               value="${cookie["empl_id"].getValue()}">
+
         <table class="table">
             <thead>
             <tr>
@@ -76,12 +76,15 @@
             return acc;
         }, {});
     }
-
+    let sum_total = 0;
     function submit() {
         let products_map = new Map();
+        sum_total = 0;
         $('tbody').children().each(function () {
             if(!$(this).children(":first").children(":first").prop("checked"))
                 return;
+            sum_total += parseInt($(this).children(":nth-child(5)").children(":first").val()) * parseFloat($(this).children(":nth-child(4)").text().trim());
+
             products_map.set($(this).children(":last").val(), {
                 'product_number' :  parseInt($(this).children(":nth-child(5)").children(":first").val()),
                 'selling_price' :  parseFloat($(this).children(":nth-child(4)").text().trim()),
@@ -95,14 +98,14 @@
             data: {
                 action: "add",
                 id_employee: $('input[name="empl_id"]').val().trim(),
-                card_number: $('input[name="customer_id"]').val().trim(),
+                card_number: $('select[name="customer_id"]').val().trim(),
                 sale_data: JSON.stringify(mapToObj(products_map)),
-                sum_total: 0
+                sum_total: sum_total
             },
             success: function (data) {
                 console.log(data);
                 //   alert("The product was added successfully!");
-                window.location.replace("http://localhost:8080/categories.jsp");
+                window.location.replace("http://localhost:8080/reciepts.jsp");
             },
             error: function (jqXHR, exception) {
                 alert("Could not add receipt: " + jqXHR.responseText);

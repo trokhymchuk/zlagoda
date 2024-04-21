@@ -1,5 +1,6 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*" %>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
@@ -8,4 +9,9 @@
 
 <jsp:include page="footer.jsp" />
 
-${cookie["role"].getValue()}
+<c:if test="${!(cookie['role'].getValue().equals('manager') || cookie['role'].getValue().equals('cachier'))}">
+    <%
+            String redirectURL = "http://localhost:8080/login.jsp";
+            response.sendRedirect(redirectURL);
+    %>
+</c:if>

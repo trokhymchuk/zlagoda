@@ -122,6 +122,14 @@
 
     <script>
         function submit(product_id) {
+            if($('input[name="name"]').val().trim().length == 0) {
+                alert("Product name must not be empty!");
+                return;
+            }
+            if($('textarea[name="characteristics"]').val().trim().length == 0) {
+                alert("Product characteristics must not be empty!");
+                return;
+            }
             $.ajax({
                 url: '/product',
                 method: 'get',

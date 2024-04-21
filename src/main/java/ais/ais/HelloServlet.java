@@ -79,43 +79,78 @@ public class HelloServlet extends HttpServlet {
     }
 
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * from Product");
+        try {
+
+            String stat = "SELECT * FROM Product INNER JOIN Category ON Product.category_number=Category.category_number ";
+        PreparedStatement ps;
+        if(!request.getParameter("category").equals("*")) {
+            stat += " WHERE Product.category_number=?";
+            ps = connection.prepareStatement(stat);
+            ps.setInt(1, Integer.parseInt(request.getParameter("category")));
+        } else {
+            ps = connection.prepareStatement(stat);
+        }
+        ResultSet rs = ps.executeQuery();
+        String format = """
+            <tr>
+                <th scope="row">%s</th>
+                <td>%s</td>
+                <td>%s</td>
+                                <td>%s</td>
+                <td>
+                    <a class="btn btn-primary" href="edit_product.jsp?id=%s"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
+                </td>
+                <td>
+                    <button onclick="remove_product('%s')" type="button" class="btn btn-danger"><i
+                            class="fa-solid fa-trash"
+                    ></i>
+                    </button>
+
+                </td>
+            </tr>
+
+
+        """;
         String resp = "";
         while (rs.next()) {
-            int id = rs.getInt("id_product");
-            String product_name = rs.getString("product_name");
-            String characteristics = rs.getString("characteristics");
-            resp += id + " " + product_name + " " + characteristics + "<a href='http://localhost:8080/ais_war_exploded/product?action=get&id=" + id + "'>view</a> <br>";
+            resp += String.format(format,rs.getString("id_product"), rs.getString("product_name"), rs.getString("category_name"),  rs.getString("characteristics"), rs.getString("id_product"), rs.getString("id_product"));
         }
         PrintWriter out = response.getWriter();
-        out.println("<html><body>");
         out.println(resp);
-//        String form = "<form method=\"GET\" action=\"product\">";
-//        form += "<input name='id'> <br> ";
-//        form += "<input name='action' value ='get'> <br><input type='submit'>";
-//        out.println(form);
-        out.println("</body></html>");
-
-
+        response.setStatus(200);
+        }  catch(Exception e) {
+            System.out.println("====================" + e);
+            PrintWriter out = response.getWriter();
+            out.print("Cannot update product, connected to the group");
+            response.setStatus(500);
+        }
     }
 
     private void get(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-        Statement statement = connection.createStatement();
-        String id_param = request.getParameter("id");
-        ResultSet rs = statement.executeQuery("SELECT * from Product WHERE id_product=" + id_param);
-        String resp = "";
-        while (rs.next()) {
-            int id = rs.getInt("id_product");
-            String product_name = rs.getString("product_name");
-            String characteristics = rs.getString("characteristics");
-            resp += id + " " + product_name + " " + characteristics + "<br>";
-        }
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<pre>" + resp + "</pre>");
-        out.println("</body></html>");
+        try {
+            Statement statement = connection.createStatement();
+            String id_param = request.getParameter("id");
+            ResultSet rs = statement.executeQuery("SELECT * from Product WHERE id_product=" + id_param);
+            String resp = "";
+            while (rs.next()) {
+                int id = rs.getInt("id_product");
+                String product_name = rs.getString("product_name");
+                String characteristics = rs.getString("characteristics");
+                resp += id + " " + product_name + " " + characteristics + "<br>";
+            }
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>");
+            out.println("<pre>" + resp + "</pre>");
+            out.println("</body></html>");
 
+        }  catch(Exception e) {
+            System.out.println("====================" + e);
+            PrintWriter out = response.getWriter();
+            out.print("Cannot update product, connected to the group");
+            response.setStatus(500);
+
+        }
     }
 
     private void edit(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
