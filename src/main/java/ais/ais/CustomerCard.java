@@ -9,8 +9,8 @@ import jakarta.servlet.http.*;
 public class CustomerCard extends HttpServlet {
     private static final long serialVersionUID = 1L;
     static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/ais";
-    static final String USER = "postgres";
-    static final String PASS = "admin";
+    static final String USER = DB.username;;
+    static final String PASS = DB.password;;
     Connection connection;
 
     public void init() {
