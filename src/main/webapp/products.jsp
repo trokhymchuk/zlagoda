@@ -34,6 +34,11 @@
 
             <button type="button" class="btn btn-outline-secondary" onclick="update()">Search</button>
         </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Enter name" name="name" id="name">
+            <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
+        </div>
     </form>
 
     <table class="table">
@@ -110,6 +115,12 @@
         });
 
     }
+
+    function search() {
+        var name = document.getElementById("name").value;
+        window.location.href = 'search_product.jsp?name=' + name;
+    }
+
     update();
 </script>
 
