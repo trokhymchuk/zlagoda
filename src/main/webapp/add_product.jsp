@@ -33,8 +33,8 @@ SELECT * from Category;
 </div>
 <div class="row mb-3">
 <label for="inputPassword3" class="col-sm-2 col-form-label">Category</label>
-<div class="col-sm-10">
-<select id="inputPassword3" name="category" class="form-select">
+    <div class="col-sm-10">
+        <select id="inputPassword3" name="category" class="form-select">
  <c:forEach var="row" items="${categories.rows}">
      <option value="${row.category_number}">${row.category_name}</option>
  </c:forEach>

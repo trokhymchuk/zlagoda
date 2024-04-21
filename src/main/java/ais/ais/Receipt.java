@@ -14,11 +14,11 @@ import org.json.*;
 
 @WebServlet(name = "Receipt", value = "/receipt")
 public class Receipt extends HttpServlet {
-    private String message;
     static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/ais";
     static final String USER = DB.username;//"postgres";
     static final String PASS = DB.password;//"admin";
     Connection connection;
+    private String message;
 
     public void init() {
 
@@ -34,8 +34,7 @@ public class Receipt extends HttpServlet {
         connection = null;
 
         try {
-            connection = DriverManager
-                    .getConnection(DB_URL, USER, PASS);
+            connection = DriverManager.getConnection(DB_URL, USER, PASS);
 
         } catch (SQLException e) {
             System.out.println("Connection Failed");
@@ -56,19 +55,15 @@ public class Receipt extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String action = request.getParameter("action");
         response.setContentType("text/html");
-       System.out.println(action);
+        System.out.println(action);
         try {
-            if (action == null)
-                action = "list";
-            if (action.equals("list"))
-                list(request, response);
-            if (action.equals("add"))
-                add(request, response);
-            if (action.equals("delete"))
-                delete(request, response);
-            if (action.equals("getTotalSum"))
-                getTotalSum(request, response);
+            if (action == null) action = "list";
+            if (action.equals("list")) list(request, response);
+            if (action.equals("add")) add(request, response);
+            if (action.equals("delete")) delete(request, response);
+            if (action.equals("getTotalSum")) getTotalSum(request, response);
         } catch (Exception e) {
+            System.out.println("===========================" + e);
             response.setStatus(504);
         }
 
@@ -78,24 +73,76 @@ public class Receipt extends HttpServlet {
     }
 
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * from Category");
-        String resp = "";
-        while (rs.next()) {
-            int id = rs.getInt("id_product");
-            String product_name = rs.getString("product_name");
-            String characteristics = rs.getString("characteristics");
-            resp += id + " " + product_name + " " + characteristics + "<a href='http://localhost:8080/ais_war_exploded/product?action=get&id=" + id + "'>view</a> <br>";
-        }
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println(resp);
-//        String form = "<form method=\"GET\" action=\"product\">";
-//        form += "<input name='id'> <br> ";
-//        form += "<input name='action' value ='get'> <br><input type='submit'>";
-//        out.println(form);
-        out.println("</body></html>");
+        try {
+            String form = """
+                     <tr>
+                                    <th scope="row">%s</th>
+                                    <td>%s %c. %s</td>
+                                    <td>%s %c. %s</td>
+                                    <td>%s</td>
+                                    <td style="width: 300px;">
+                                    <details>
+                                    
+                                    
+                                     <summary>Products</summary>
+                                    
+                                    
+                                     %s
+                                    
+                                    
+                                    </details>
+                                    
+                                    </td>
+                                    <td>%s</td>
+                                    <td>%s</td>
+                                    <td>
+                                        <button onclick="remove('%s')" type="button" class="btn btn-danger"><i
+                                                class="fa-solid fa-trash"
+                                        ></i>
+                                        </button>
+                                    
+                                    </td>
+                                </tr>
+                    """;
+            String getChecks = "SELECT * FROM checktable INNER JOIN Employee ON checktable.id_employee=Employee.id_employee INNER JOIN customer_card ON checktable.card_number = customer_card.card_number  ";
+            if (!request.getParameter("cashier").equals("*")) {
+                getChecks += " WHERE checktable.id_employee='" + request.getParameter("cashier") + "' ";
 
+            }
+            if (!request.getParameter("startDate").isEmpty()) {
+                if (!request.getParameter("cashier").equals("*")) getChecks += " AND ";
+                else getChecks += " WHERE ";
+
+                getChecks += " print_date>='" + request.getParameter("startDate") + "' ";
+            }
+            if (!request.getParameter("endDate").isEmpty()) {
+                if (request.getParameter("cashier").equals("*") && request.getParameter("startDate").isEmpty()) {
+                    getChecks += " WHERE ";
+                } else getChecks += " AND ";
+
+                getChecks += " print_date< '" + request.getParameter("endDate") + "' ";
+            }
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(getChecks);
+            String res = "";
+            PrintWriter out = response.getWriter();
+            while (rs.next()) {
+                String check_n = rs.getString("check_number");
+                String product_list = "SELECT * FROM Sale INNER JOIN Store_product ON Sale.UPC=Store_product.UPC INNER JOIN Product ON Store_product.id_product=Product.id_product WHERE check_number=?";
+                PreparedStatement products = connection.prepareStatement(product_list);
+                products.setString(1, check_n);
+                ResultSet products_get = products.executeQuery();
+                String products_str = "";
+                while (products_get.next()) {
+                    products_str += products_get.getString("product_name") + ": " + products_get.getString("selling_price") + "$ x " + products_get.getString("product_number") + "<br>";
+                }
+                out.println(String.format(form, rs.getString("check_number"), rs.getString("empl_name"),rs.getString("empl_patronymic").charAt(0), rs.getString("empl_surname") , rs.getString("cust_name"),rs.getString("cust_patronymic").charAt(0), rs.getString("cust_surname"), rs.getString("print_date"), products_str, rs.getString("sum_total"), rs.getString("vat"), rs.getString("check_number")));
+            }
+            response.setStatus(200);
+        } catch (Exception e) {
+            System.out.println("=================" + e);
+            response.setStatus(500);
+        }
 
     }
 
@@ -115,6 +162,7 @@ public class Receipt extends HttpServlet {
         }
 
     }
+
     String getRandimCheckNumber() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
@@ -133,7 +181,7 @@ public class Receipt extends HttpServlet {
         Random r = new Random();
         String insert_check_stat = "INSERT INTO checktable (check_number, id_employee, card_number, print_date, sum_total, vat) VALUES(?, ?, ?, NOW(), ?, ?)";
         PreparedStatement ps = connection.prepareStatement(insert_check_stat);
-        String check_n  = getRandimCheckNumber();
+        String check_n = getRandimCheckNumber();
         ps.setString(1, check_n);
         ps.setString(2, request.getParameter("id_employee"));
         ps.setString(3, request.getParameter("card_number"));
@@ -141,7 +189,7 @@ public class Receipt extends HttpServlet {
         ps.setDouble(5, Double.parseDouble(request.getParameter("sum_total")) * 0.2);
         try {
             ps.execute();
-            for(String key : jo.keySet()) {
+            for (String key : jo.keySet()) {
                 PreparedStatement sale_statement = connection.prepareStatement("INSERT INTO Sale (UPC, check_number, product_number, selling_price) VALUES(?, ?, ?, ?)");
                 sale_statement.setString(1, key);
                 sale_statement.setString(2, check_n);

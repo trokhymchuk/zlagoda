@@ -81,13 +81,15 @@ public class HelloServlet extends HttpServlet {
     private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
         try {
 
-            String stat = "SELECT * FROM Product INNER JOIN Category ON Product.category_number=Category.category_number ";
+            String stat = "SELECT * FROM Product INNER JOIN Category ON Product.category_number=Category.category_number";
         PreparedStatement ps;
         if(!request.getParameter("category").equals("*")) {
-            stat += " WHERE Product.category_number=?";
+            stat += " WHERE Product.category_number=? ORDER BY product_name";
+
             ps = connection.prepareStatement(stat);
             ps.setInt(1, Integer.parseInt(request.getParameter("category")));
         } else {
+            stat += " ORDER BY product_name";
             ps = connection.prepareStatement(stat);
         }
         ResultSet rs = ps.executeQuery();

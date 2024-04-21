@@ -142,7 +142,7 @@ public class StoreProducts extends HttpServlet {
             ps_prom.setString(3, promotionalUPC);
             try {
 
-                ps_prom.execute();
+             //   ps_prom.execute();
                 response.setStatus(200);
             } catch (Exception e) {
                 System.out.println("====================" + e);
@@ -193,9 +193,12 @@ public class StoreProducts extends HttpServlet {
         }
 
     }
+
     private void add_promotional(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
         PreparedStatement ps = connection.prepareStatement("SELECT * FROM Store_product WHERE UPC=?");
-        ps.setString(1,request.getParameter("UPC"));
+        ps.setString(1, request.getParameter("UPC"));
+        PreparedStatement setStoreProductNumbertoZero = connection.prepareStatement("UPDATE Store_product SET products_number=0 WHERE UPC=?");
+        setStoreProductNumbertoZero.setString(1, request.getParameter("UPC"));
         try {
             ResultSet rs = ps.executeQuery();
             rs.next();
@@ -211,6 +214,7 @@ public class StoreProducts extends HttpServlet {
             update_s.setString(1, random_upc);
             update_s.setString(2, request.getParameter("UPC"));
             update_s.execute();
+            setStoreProductNumbertoZero.execute();
             response.setStatus(200);
         } catch (Exception e) {
             System.out.println(e);
@@ -220,6 +224,7 @@ public class StoreProducts extends HttpServlet {
         }
 
     }
+
     String getRandomUPC() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
@@ -232,11 +237,18 @@ public class StoreProducts extends HttpServlet {
         return saltStr;
 
     }
+
     private void del_promotional(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
-        PreparedStatement ps = connection.prepareStatement("UPDATE Store_product SET upc_prom=NULL WHERE UPC=?");
-        ps.setString(1,request.getParameter("UPC"));
+
+        PreparedStatement ps = connection.prepareStatement("UPDATE Store_product SET products_number=((SELECT products_number FROM Store_product WHERE UPC=?) + (SELECT products_number FROM Store_product WHERE UPC=(SELECT UPC_prom FROM Store_product WHERE UPC=?))) WHERE UPC=?");
+        ps.setString(1, request.getParameter("UPC"));
+        ps.setString(2, request.getParameter("UPC"));
+        ps.setString(3, request.getParameter("UPC"));
+        PreparedStatement ps2 = connection.prepareStatement("UPDATE Store_product SET  products_number=0 WHERE UPC=(SELECT UPC_prom FROM Store_product WHERE UPC=?)");
+        ps2.setString(1, request.getParameter("UPC"));
         try {
             ps.execute();
+            ps2.execute();
             response.setStatus(200);
         } catch (Exception e) {
             System.out.println(e);

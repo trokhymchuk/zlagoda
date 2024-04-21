@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 
 <jsp:include page="header.jsp"/>
-<jsp:include page="DB.jsp" />
+<jsp:include page="DB.jsp"/>
 <%
     String potsgres_username = (String) request.getAttribute("potsgres_username");
     String postgres_password = (String) request.getAttribute("postgres_password");
@@ -75,16 +75,8 @@
                     </c:choose>
                 </td>
                 <td>
-                    <c:choose>
-                        <c:when test="${row.promotional_product}">
-                            <a class="btn btn-primary disabled" href="#"><i
-                                    class="fa-solid fa-pen-to-square"></i></a>
-                        </c:when>
-                        <c:otherwise>
-                            <a class="btn btn-primary" href="edit_store_product.jsp?UPC=${row.UPC}"><i
-                                    class="fa-solid fa-pen-to-square"></i></a>
-                        </c:otherwise>
-                    </c:choose>
+                    <a class="btn btn-primary" href="edit_store_product.jsp?UPC=${row.UPC}"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
                 </td>
                 <td>
                     <button onclick="remove_store_product('${row.UPC}')" type="button" class="btn btn-danger"><i
