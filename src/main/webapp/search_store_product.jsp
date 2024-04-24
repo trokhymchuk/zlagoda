@@ -25,8 +25,6 @@
         </div>
     </form>
 
-    <div id="result">
-    </div>
     <table class="table">
         <thead>
         <tr>

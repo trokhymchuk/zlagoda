@@ -26,8 +26,6 @@
       <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
     </div>
   </form>
-  <div id="result">
-  </div>
   <table class="table">
     <thead>
     <tr>
@@ -90,7 +88,6 @@
 
   function search() {
     var surname = document.getElementById("surname").value;
-    alert(surname);
     window.location.href = 'search_employee.jsp?surname=' + surname;
   }
 </script>
