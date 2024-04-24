@@ -31,7 +31,7 @@
         <div class="col-sm-4">
             <input type="date" id="endDate" name="endDate" class="form-control">
         </div>
-        <label for="inputPassword3" class="col-sm-2 col-form-label">Casheir</label>
+        <label for="inputPassword3" class="col-sm-2 col-form-label">Cashier</label>
         <div class="col-sm-10">
             <div class="row mb-3">
 
