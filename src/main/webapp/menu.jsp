@@ -54,6 +54,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/reciepts.jsp">List</a></li>
                             <li><a class="dropdown-item" href="/add_reciept.jsp">Add</a></li>
+                            <li><a class="dropdown-item" href="/top_sales.jsp">Top Sales</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -65,6 +66,7 @@
                             <li><a class="dropdown-item" href="/employee.jsp">List</a></li>
                             <li><a class="dropdown-item" href="/add_employee.jsp">Add</a></li>
                             <li><a class="dropdown-item" href="/cashier.jsp">Cashiers</a></li>
+                            <li><a class="dropdown-item" href="/search_bad_cashier.jsp">Bad Cashiers</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
