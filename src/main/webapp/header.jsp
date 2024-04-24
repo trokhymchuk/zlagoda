@@ -24,6 +24,20 @@
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
             crossorigin="anonymous"></script>
 
+    <style>
+        #resultsTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+
+        #resultsTable th, #resultsTable td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+
 </head>
 
 <body>

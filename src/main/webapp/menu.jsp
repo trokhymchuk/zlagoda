@@ -32,8 +32,8 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/store_products.jsp">List</a></li>
-                            <li><a class="dropdown-item" href="/regular_store_products.jsp">Regular</a></li>
                             <li><a class="dropdown-item" href="/add_store_product.jsp">Add</a></li>
+                            <li><a class="dropdown-item" href="/regular_store_products.jsp">Regular</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

@@ -67,6 +67,8 @@ public class HelloServlet extends HttpServlet {
                 delete(request, response);
             if (action.equals("add"))
                 add(request, response);
+            if (action.equals("listPromotional"))
+                listPromotional(request, response);
 
 
         } catch (Exception e) {
@@ -209,4 +211,41 @@ public class HelloServlet extends HttpServlet {
 
     }
 
+    private void listPromotional(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        String promotionStatus = request.getParameter("promotionStatus");
+        String sortCriteria = request.getParameter("sortCriteria");
+
+        // Determine the sorting column based on the sortCriteria parameter
+        String orderBy = "productName".equals(sortCriteria) ? "Product.product_name" : "Store_product.products_number";
+
+
+        String query = "SELECT Product.product_name, Store_product.products_number, Store_product.selling_price, Product.characteristics, Category.category_name " +
+                "FROM Store_product " +
+                "INNER JOIN Product ON Store_product.id_product = Product.id_product " +
+                "INNER JOIN Category ON Product.category_number = Category.category_number " +
+                "WHERE promotional_product = " + promotionStatus + " " +
+                "ORDER BY " + orderBy;
+
+        try (PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            StringBuilder resp = new StringBuilder("<table id='resultsTable'>");
+            // Create headers to match the sorting criteria
+            resp.append("<tr><th>Product name</th><th>Number of units</th><th>Selling price</th><th>Characteristics</th><th>Category</th></tr>");
+            while (rs.next()) {
+                resp.append(String.format("<tr><td>%s</td><td>%d</td><td>%.2f</td><td>%s</td><td>%s</td></tr>",
+                        rs.getString("product_name"), rs.getInt("products_number"), rs.getDouble("selling_price"),
+                        rs.getString("characteristics"), rs.getString("category_name")));
+            }
+            resp.append("</table>");
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>");
+            out.println(resp.toString());
+            out.println("</body></html>");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            response.setStatus(500);
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>Error retrieving data: " + e.getMessage() + "</body></html>");
+        }
+    }
 }
