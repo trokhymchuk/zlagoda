@@ -39,7 +39,7 @@
                     <select id="inputPassword3" placeholder="Enter category" name="cashier" class="form-select">
                         <option value="*"></option>
                         <c:forEach var="row" items="${casheirs.rows}">
-                            <option value="${row.id_employee}">${row.empl_name} ${row.empl_patronymic.charAt(0)}. ${row.empl_surname} </option>
+                            <option value="${row.id_employee}">${row.empl_name} ${((row.empl_patronymic == null || row.empl_patronymic.length() == 0) ? ""  : row.empl_patronymic.charAt(0))}. ${row.empl_surname} </option>
                         </c:forEach>
                     </select>
                 </div>
