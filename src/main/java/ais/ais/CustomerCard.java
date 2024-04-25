@@ -120,6 +120,19 @@ public class CustomerCard extends HttpServlet {
             response.setStatus(400);
             return;
         }
+        String custSurname = request.getParameter("cust_surname");
+        String custName = request.getParameter("cust_name");
+        if (custSurname.length() > 50 || custName.length() > 50) {
+            response.getWriter().print("Surname and Name must be 50 characters or less.");
+            response.setStatus(400);
+            return;
+        }
+        String zipCode = request.getParameter("zip_code");
+        if (zipCode.length() > 9) {
+            response.getWriter().print("Zip code must be 9 characters or less.");
+            response.setStatus(400);
+            return;
+        }
         String stat = "UPDATE Customer_Card SET cust_surname = ?, cust_name = ?, cust_patronymic = ?, phone_number = ?, city = ?, street = ?, zip_code = ?, percent = ? WHERE card_number = ?";
         PreparedStatement ps = connection.prepareStatement(stat);
         ps.setString(1, request.getParameter("cust_surname"));
@@ -159,6 +172,19 @@ public class CustomerCard extends HttpServlet {
         int percent = Integer.parseInt(request.getParameter("percent"));
         if (percent < 0 || percent > 100) {
             response.getWriter().print("Percent must be between 0 and 100");
+            response.setStatus(400);
+            return;
+        }
+        String custSurname = request.getParameter("cust_surname");
+        String custName = request.getParameter("cust_name");
+        if (custSurname.length() > 50 || custName.length() > 50) {
+            response.getWriter().print("Surname and Name must be 50 characters or less.");
+            response.setStatus(400);
+            return;
+        }
+        String zipCode = request.getParameter("zip_code");
+        if (zipCode.length() > 9) {
+            response.getWriter().print("Zip code must be 9 characters or less.");
             response.setStatus(400);
             return;
         }

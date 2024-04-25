@@ -76,8 +76,8 @@
       <label for="inputEmail3" class="col-sm-2 col-form-label">Zip code</label>
       <div class="col-sm-10">
         <input type="text" name="zip_code" class="form-control"
-               pattern="^\d{5}$"
-               title="Zip code must be exactly 5 digits."
+               pattern="^.{1,9}$"
+               title="Zip code must be up to 9 characters."
                value="${result.rows[0].zip_code}">
       </div>
     </div>
