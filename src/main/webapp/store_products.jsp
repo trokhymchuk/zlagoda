@@ -90,6 +90,23 @@
         </tbody>
     </table>
 
+    <div class="header">
+        <h4 style="text-align:center;">Find information about prom/non-prom products</h4>
+    </div>
+
+    <div class="input-group mb-3">
+        <select id="promotionStatus" name="promotionStatus" class="form-select">
+            <option value="true">Promotional products</option>
+            <option value="false">Non-promotional products</option>
+        </select>
+        <select id="sortCriteria" name="sortCriteria" class="form-select">
+            <option value="productName">Sort by name</option>
+            <option value="productsNumber">Sort by number of units</option>
+        </select>
+        <button type="button" class="btn btn-outline-secondary" onclick="update()">Search</button>
+    </div>
+
+    <div id="searchResults"></div>
 </div>
 <script>
     function remove_store_product(UPC) {
@@ -157,6 +174,25 @@
         var upc = document.getElementById("upc").value;
         window.location.href = 'search_store_product.jsp?upc=' + upc;
     }
+
+    function update() {
+        const promoStatus = document.getElementById('promotionStatus').value;
+        const sortCriteria = document.getElementById('sortCriteria').value;
+
+        $.ajax({
+            url: '/product',
+            method: 'get',
+            dataType: 'html',
+            data: {promotionStatus: promoStatus, sortCriteria: sortCriteria, action: "listPromotional"},
+            success: function (data) {
+                $("#searchResults").html(data);
+            },
+            error: function (jqXHR, exception) {
+                alert("Error fetching products: " + jqXHR.responseText);
+            }
+        });
+    }
+
 </script>
 
 

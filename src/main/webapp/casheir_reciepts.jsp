@@ -9,6 +9,7 @@
 <%
     String potsgres_username = (String) request.getAttribute("potsgres_username");
     String postgres_password = (String) request.getAttribute("postgres_password");
+    String empl_id = (String) request.getAttribute("empl_id");
 
 %>
 <sql:setDataSource var="snapshot" driver="org.postgresql.Driver"
@@ -31,16 +32,13 @@
         <div class="col-sm-4">
             <input type="date" id="endDate" name="endDate" class="form-control">
         </div>
-        <label for="inputPassword3" class="col-sm-2 col-form-label">Cashier</label>
+        <label for="inputPassword3" class="col-sm-2 col-form-label">Casheir</label>
         <div class="col-sm-10">
             <div class="row mb-3">
 
                 <div class="input-group mb-3">
-                    <select id="inputPassword3" placeholder="Enter category" name="cashier" class="form-select">
-                        <option value="*"></option>
-                        <c:forEach var="row" items="${casheirs.rows}">
-                            <option value="${row.id_employee}">${row.empl_name} ${((row.empl_patronymic == null || row.empl_patronymic.length() == 0) ? ""  : row.empl_patronymic.charAt(0))}. ${row.empl_surname} </option>
-                        </c:forEach>
+                    <select disabled id="inputPassword3" name="cashier" class="form-select">
+                        <option value="<%=potsgres_username%>" selected> Me </option>
                     </select>
                 </div>
             </div>
@@ -76,6 +74,11 @@
 
 </div>
 <script>
+    $("#startDate").val((new Date()).toLocaleDateString('en-CA'))
+    var date = new Date();
+    date.setDate(date.getDate() + 1)
+    $("#endDate").val(date.toLocaleDateString('en-CA'))
+
     function remove(check_number) {
         $.ajax({
             url: '/receipt',
