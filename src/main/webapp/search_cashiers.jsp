@@ -26,8 +26,7 @@
   WHERE upc = Store_product.upc AND check_number = checktable.check_number))
   AND EXISTS(SELECT *
   FROM product
-  WHERE id_product = Store_product.id_product AND category_number = '<%= request.getParameter("category")%>'))
-  AND empl_role = 'Cashier';
+  WHERE id_product = Store_product.id_product AND category_number = '<%= request.getParameter("category")%>')) ;
 </sql:query>
 <sql:query dataSource="${snapshot}" var="categories">
   SELECT * from Category;
