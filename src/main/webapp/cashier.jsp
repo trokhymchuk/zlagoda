@@ -15,7 +15,24 @@
   SELECT * FROM Employee WHERE empl_role = 'Cashier' ORDER BY empl_surname ASC
 </sql:query>
 
+<sql:query dataSource="${snapshot}" var="categories">
+  SELECT * from Category;
+</sql:query>
+
 <div class="container">
+  <form id="searchForm">
+    <div class="input-group mb-3">
+      <select id="category" placeholder="Enter category" name="category" class="form-select">
+        <option value="*"></option>
+        <c:forEach var="row" items="${categories.rows}">
+          <option value="${row.category_number}">${row.category_name}</option>
+        </c:forEach>
+      </select>
+
+      <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
+    </div>
+  </form>
+
   <h2>Info about cashiers</h2>
   <table class="table">
     <thead>
@@ -52,5 +69,12 @@
     </tbody>
   </table>
 </div>
+
+<script>
+  function search() {
+    var category = document.getElementById("category").value;
+    window.location.href = 'search_cashiers.jsp?category=' + category;
+  }
+</script>
 
 <jsp:include page="footer.jsp" />
