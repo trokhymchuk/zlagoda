@@ -71,7 +71,7 @@
         <div class="row mb-3">
             <label for="inputEmail3" class="col-sm-2 col-form-label">UPC</label>
             <div class="col-sm-10">
-                <input type="text" name="UPC" class="form-control" id="inputEmail3"
+                <input type="text" minlength="3" name="UPC" class="form-control" id="inputEmail3"
                        value="">
             </div>
         </div>
@@ -122,7 +122,7 @@
                 window.location.replace("http://localhost:8080/store_products.jsp");
             },
             error: function (jqXHR, exception) {
-                alert("Could not add product: " + jqXHR.responseText);
+                alert("Could not add product");
                 console.log(exception);
                 console.log(jqXHR);
             }
