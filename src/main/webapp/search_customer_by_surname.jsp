@@ -15,18 +15,14 @@
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/>
 <sql:query dataSource="${snapshot}" var="result">
-  SELECT * from Customer_Card ORDER BY cust_surname;
+  SELECT * from Customer_Card WHERE cust_surname LIKE '<%= request.getParameter("surname")%>%' ORDER BY cust_surname;
 </sql:query>
 
 <div class="container">
   <form id="searchForm">
     <div class="input-group mb-3">
-      <input type="number" class="form-control" placeholder="Enter percent of the card" name="percent" id="percent" min="0" max="100" >
-      <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
-    </div>
-    <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Enter surname of the customer" name="surname" id="surname" value="">
-      <button type="button" class="btn btn-outline-secondary" onclick="searchBySurname()">Search</button>
+      <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
     </div>
   </form>
   <table class="table">
@@ -97,18 +93,6 @@
   }
 
   function search() {
-    var percent = document.getElementById("percent").value;
-    var percentValue = parseInt(percent);
-    // Перевіряємо, чи введене значення знаходиться в діапазоні від 0 до 100
-    if (percentValue < 0 || percentValue > 100) {
-      alert("Please enter a value between 0 and 100.");
-    }
-    else {
-      window.location.href = 'search_customer_card.jsp?percent=' + percent;
-    }
-  }
-
-  function searchBySurname() {
     var surname = document.getElementById("surname").value;
     window.location.href = 'search_customer_by_surname.jsp?surname=' + surname;
   }
