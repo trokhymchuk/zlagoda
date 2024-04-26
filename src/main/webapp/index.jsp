@@ -6,7 +6,7 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 
 <jsp:include page="header.jsp" />
-
+<img src="image.png" alt="Zlagoda in the future" width="100%">
 <jsp:include page="footer.jsp" />
 
 <c:if test="${!(cookie['role'].getValue().equals('Manager') || cookie['role'].getValue().equals('Cashier'))}">
