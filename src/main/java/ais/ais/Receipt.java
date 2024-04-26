@@ -191,11 +191,17 @@ public class Receipt extends HttpServlet {
             ps.execute();
             for (String key : jo.keySet()) {
                 PreparedStatement sale_statement = connection.prepareStatement("INSERT INTO Sale (UPC, check_number, product_number, selling_price) VALUES(?, ?, ?, ?)");
+                PreparedStatement decrement = connection.prepareStatement("UPDATE Store_product SET products_number=((SELECT products_number FROM Store_product WHERE UPC=?) - ?) WHERE UPC=?");
+                decrement.setString(1, key);
+                decrement.setInt(2, jo.getJSONObject(key).getInt("product_number"));
+                decrement.setString(3, key);
                 sale_statement.setString(1, key);
                 sale_statement.setString(2, check_n);
                 sale_statement.setInt(3, jo.getJSONObject(key).getInt("product_number"));
                 sale_statement.setDouble(4, jo.getJSONObject(key).getDouble("selling_price"));
                 sale_statement.execute();
+                decrement.execute();
+
             }
             response.setStatus(200);
         } catch (Exception e) {

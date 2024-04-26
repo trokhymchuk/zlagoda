@@ -161,10 +161,20 @@ public class StoreProducts extends HttpServlet {
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        PreparedStatement ps_get_prom = connection.prepareStatement("SELECT UPC_prom FROM Store_product WHERE UPC=?");
+        ps_get_prom.setString(1, request.getParameter("UPC"));
         String stat = "DELETE FROM Store_product WHERE UPC = ?";
         PreparedStatement ps = connection.prepareStatement(stat);
+        PreparedStatement delete_prom = connection.prepareStatement(stat);
+
         ps.setString(1, request.getParameter("UPC"));
         try {
+            ResultSet rs = ps_get_prom.executeQuery();
+            rs.next();
+            if(rs.getString("UPC_prom") != null) {
+                delete_prom.setString(1, rs.getString("UPC_prom"));
+                delete_prom.execute();
+            }
             ps.execute();
             response.setStatus(200);
         } catch (Exception e) {

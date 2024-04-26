@@ -71,8 +71,28 @@ public class Employee extends HttpServlet {
                 add(request, response);
             if (action.equals("listCashiersSortedBySurname"))
                 listCashiersSortedBySurname(request, response);
+            if (action.equals("passreset"))
+                passreset(request, response);
+
         } catch (Exception e) {
             response.setStatus(504);
+        }
+
+    }
+    private void passreset(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        System.out.println("Pass: " + request.getParameter("password"));
+        String stat = "UPDATE Employee SET  password=sha256('" + request.getParameter("password") + "') WHERE id_employee = ?";
+        PreparedStatement ps = connection.prepareStatement(stat);
+        ps.setString(1, request.getParameter("id"));
+        System.out.println("Stat: " + ps.toString());
+        try {
+            ps.execute();
+            response.setStatus(200);
+        } catch (Exception e) {
+            System.out.println("====================" + e);
+            PrintWriter out = response.getWriter();
+            out.print("Cannot update password");
+            response.setStatus(500);
         }
 
     }

@@ -102,7 +102,7 @@
         $('tbody').children().each(function () {
             total_sum += +($(this).children(":nth-child(6)").text())
         });
-        $("#totalSum").text(total_sum)
+        $("#totalSum").text(total_sum.toFixed(2))
 
     }
 
