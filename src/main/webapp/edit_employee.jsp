@@ -125,6 +125,10 @@
 
   <script>
     function submit(employee_id) {
+      if(!$('input[name="surname"]').val().trim()||!$('input[name="name"]').val().trim()||!$('input[name="role"]:checked').val()||!$('input[name="salary"]').val().trim()||!$('input[name="date_of_birth"]').val().trim()||!$('input[name="date_of_start"]').val().trim()||!$('input[name="city"]').val().trim()||!$('input[name="street"]').val().trim()||!$('input[name="zip_code"]').val().trim()||!$('input[name="phone_number"]').val().trim()){
+        alert("Please fill in all required fields.");
+        return;
+      }
       $.ajax({
         url: '/employee',
         method: 'get',

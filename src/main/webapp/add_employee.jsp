@@ -134,28 +134,46 @@
 
   <button type="submit" class="btn btn-primary">Add</button>
   </form>
+</div>
 
   <script>
     function submit() {
+      var id_employee = $('input[name="id_employee"]').val().trim();
+      var surname = $('input[name="surname"]').val().trim();
+      var name = $('input[name="name"]').val().trim();
+      var patronymic = $('input[name="patronymic"]').val().trim();
+      var role = $('input[name="role"]:checked').val();
+      var password = $('input[name="password"]').val().trim();
+      var salary = $('input[name="salary"]').val().trim();
+      var date_of_birth = $('input[name="date_of_birth"]').val().trim();
+      var date_of_start = $('input[name="date_of_start"]').val().trim();
+      var phone_number = $('input[name="phone_number"]').val().trim();
+      var city = $('input[name="city"]').val().trim();
+      var street = $('input[name="street"]').val().trim();
+      var zip_code = $('input[name="zip_code"]').val().trim();
+      if (!id_employee || !surname || !name || !role || !password || !salary || !date_of_birth || !date_of_start || !phone_number || !city || !street || !zip_code) {
+        alert("Please fill in all required fields.");
+        return;
+      }
       $.ajax({
         url: '/employee',
         method: 'get',
         dataType: 'html',
         data: {
           action: "add",
-          id: $('input[name="id_employee"]').val().trim(),
-          surname: $('input[name="surname"]').val().trim(),
-          name: $('input[name="name"]').val().trim(),
-          patronymic: $('input[name="patronymic"]').val().trim(),
-          role:$('input[name="role"]:checked').val(),
-          password: $('input[name="password"]').val().trim(),
-          salary: $('input[name="salary"]').val().trim(),
-          date_of_birth: $('input[name="date_of_birth"]').val().trim(),
-          date_of_start: $('input[name="date_of_start"]').val().trim(),
-          phone_number: $('input[name="phone_number"]').val().trim(),
-          city: $('input[name="city"]').val().trim(),
-          street: $('input[name="street"]').val().trim(),
-          zip_code: $('input[name="zip_code"]').val().trim(),
+          id: id_employee,
+          surname: surname,
+          name: name,
+          patronymic: patronymic,
+          role: role,
+          password: password,
+          salary: salary,
+          date_of_birth: date_of_birth,
+          date_of_start: date_of_start,
+          phone_number: phone_number,
+          city: city,
+          street: street,
+          zip_code: zip_code,
         },
         success: function (data) {
           console.log(data);

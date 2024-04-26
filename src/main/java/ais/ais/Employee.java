@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 @WebServlet(name = "Employee", value = "/employee")
 public class Employee extends HttpServlet {
@@ -167,6 +169,23 @@ public class Employee extends HttpServlet {
         ps.setDouble(5, Double.valueOf(request.getParameter("salary")));
         ps.setDate(6, Date.valueOf(request.getParameter("date_of_birth")));
         ps.setDate(7, Date.valueOf(request.getParameter("date_of_start")));
+        LocalDate dateOfBirth = LocalDate.parse(request.getParameter("date_of_birth"));
+        LocalDate dateOfStart = LocalDate.parse(request.getParameter("date_of_start"));
+        LocalDate currentDate = LocalDate.now();
+        Period ageDifference = Period.between(dateOfBirth, currentDate);
+        Period dateDifference = Period.between(dateOfBirth, dateOfStart);
+        if (ageDifference.getYears()< 18) {
+            PrintWriter out = response.getWriter();
+            out.print("person is too young");
+            response.setStatus(500);
+            return;
+        }
+        if (dateDifference.getYears()< 18) {
+            PrintWriter out = response.getWriter();
+            out.print("person is not of legal age on the date of starting work");
+            response.setStatus(500);
+            return;
+        }
         ps.setString(8, request.getParameter("phone_number"));
         ps.setString(9, request.getParameter("city"));
         ps.setString(10, request.getParameter("street"));
@@ -210,6 +229,23 @@ public class Employee extends HttpServlet {
         ps.setString(5, request.getParameter("role"));
         ps.setDouble(6, Double.valueOf(request.getParameter("salary")));
         ps.setDate(7, Date.valueOf(request.getParameter("date_of_birth")));
+        LocalDate dateOfBirth = LocalDate.parse(request.getParameter("date_of_birth"));
+        LocalDate dateOfStart = LocalDate.parse(request.getParameter("date_of_start"));
+        LocalDate currentDate = LocalDate.now();
+        Period ageDifference = Period.between(dateOfBirth, currentDate);
+        Period dateDifference = Period.between(dateOfBirth, dateOfStart);
+        if (ageDifference.getYears()< 18) {
+            PrintWriter out = response.getWriter();
+            out.print("person is too young");
+            response.setStatus(500);
+            return;
+        }
+        if (dateDifference.getYears()< 18) {
+            PrintWriter out = response.getWriter();
+            out.print("person is not of legal age on the date of starting work");
+            response.setStatus(500);
+            return;
+        }
         ps.setDate(8, Date.valueOf(request.getParameter("date_of_start")));
         ps.setString(9, request.getParameter("phone_number"));
         ps.setString(10, request.getParameter("city"));
