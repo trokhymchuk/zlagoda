@@ -25,8 +25,9 @@
     <form action="javascript:submit();">
         <div class="input-group mb-3">
             <select id="inputPassword3" placeholder="Customer " name="customer_id" class="form-select">
+                <option value="0"> - </option>
                 <c:forEach var="row" items="${customers.rows}">
-                    <option value="${row.card_number}"><c:out value="${row.cust_name}"/> <c:out value="${row.cust_patronymic.charAt(0)}"/>. <c:out value="${row.cust_surname}"/> </option>
+                    <option value="${row.card_number}"><c:out value="${row.cust_name}"/> ${((row.cust_patronymic == null || row.cust_patronymic.length() == 0) ? ""  : row.cust_patronymic.charAt(0))} <c:out value="${row.cust_surname}"/> </option>
                 </c:forEach>
             </select>
 
@@ -108,7 +109,8 @@
                 window.location.replace("http://localhost:8080/reciepts.jsp");
             },
             error: function (jqXHR, exception) {
-                alert("Could not add receipt: " + jqXHR.responseText);
+                 alert("Your session is expired! Please log in again!");
+                window.location.replace("http://localhost:8080/login.jsp");
                 console.log(exception);
                 console.log(jqXHR);
             }

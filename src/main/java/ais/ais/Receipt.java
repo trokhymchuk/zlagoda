@@ -4,13 +4,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.Random;
-
-import org.json.*;
 
 @WebServlet(name = "Receipt", value = "/receipt")
 public class Receipt extends HttpServlet {
@@ -78,7 +77,7 @@ public class Receipt extends HttpServlet {
                      <tr>
                                     <th scope="row">%s</th>
                                     <td>%s %c. %s</td>
-                                    <td>%s %c. %s</td>
+                                    <td>%s %s %s</td>
                                     <td>%s</td>
                                     <td style="width: 300px;">
                                     <details>
@@ -104,7 +103,7 @@ public class Receipt extends HttpServlet {
                                     </td>
                                 </tr>
                     """;
-            String getChecks = "SELECT * FROM checktable INNER JOIN Employee ON checktable.id_employee=Employee.id_employee INNER JOIN customer_card ON checktable.card_number = customer_card.card_number  ";
+            String getChecks = "SELECT * FROM checktable INNER JOIN Employee ON checktable.id_employee=Employee.id_employee LEFT JOIN customer_card ON checktable.card_number = customer_card.card_number  ";
             if (!request.getParameter("cashier").equals("*")) {
                 getChecks += " WHERE checktable.id_employee='" + request.getParameter("cashier") + "' ";
 
@@ -136,7 +135,7 @@ public class Receipt extends HttpServlet {
                 while (products_get.next()) {
                     products_str += products_get.getString("product_name") + ": " + products_get.getString("selling_price") + "$ x " + products_get.getString("product_number") + "<br>";
                 }
-                out.println(String.format(form, rs.getString("check_number"), rs.getString("empl_name"),rs.getString("empl_patronymic").charAt(0), rs.getString("empl_surname") , rs.getString("cust_name"),rs.getString("cust_patronymic").charAt(0), rs.getString("cust_surname"), rs.getString("print_date"), products_str, rs.getString("sum_total"), rs.getString("vat"), rs.getString("check_number")));
+                out.println(String.format(form, rs.getString("check_number"), rs.getString("empl_name"), rs.getString("empl_patronymic").charAt(0), rs.getString("empl_surname"), (rs.getString("cust_name") != null) ? rs.getString("cust_name") : "", (rs.getString("cust_patronymic") != null) ? rs.getString("cust_patronymic") : "", (rs.getString("cust_surname") != null) ? rs.getString("cust_surname") : "", rs.getString("print_date"), products_str, rs.getString("sum_total"), rs.getString("vat"), rs.getString("check_number")));
             }
             response.setStatus(200);
         } catch (Exception e) {
@@ -184,7 +183,8 @@ public class Receipt extends HttpServlet {
         String check_n = getRandimCheckNumber();
         ps.setString(1, check_n);
         ps.setString(2, request.getParameter("id_employee"));
-        ps.setString(3, request.getParameter("card_number"));
+        if (request.getParameter("card_number").equals("0")) ps.setString(3, null);
+        else ps.setString(3, request.getParameter("card_number"));
         ps.setDouble(4, Double.parseDouble(request.getParameter("sum_total")));
         ps.setDouble(5, Double.parseDouble(request.getParameter("sum_total")) * 0.2);
         try {

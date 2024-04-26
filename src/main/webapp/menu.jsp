@@ -33,6 +33,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/store_products.jsp">List</a></li>
                             <li><a class="dropdown-item" href="/add_store_product.jsp">Add</a></li>
+                            <li><a class="dropdown-item" href="/product_stats.jsp">Stats</a></li>
                             <li><a class="dropdown-item" href="/regular_store_products.jsp">Regular</a></li>
                             <li><a class="dropdown-item" href="/prom_non_prom_products.jsp">Prom-Non-Prom</a></li>
                         </ul>
@@ -54,6 +55,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/reciepts.jsp">List</a></li>
+                            <li><a class="dropdown-item" href="/search_reciept.jsp">Search</a></li>
                             <li><a class="dropdown-item" href="/add_reciept.jsp">Add</a></li>
                             <li><a class="dropdown-item" href="/top_sales.jsp">Top Sales</a></li>
                         </ul>
@@ -78,6 +80,21 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="/customer_card.jsp">List</a></li>
                             <li><a class="dropdown-item" href="/add_customer_card.jsp">Add</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Reports
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" target=”_blank” href="/employee_report.jsp">Employees</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/customer_report.jsp">Customers</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/category_report.jsp">Categories</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/product_report.jsp">Products</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/store_product_report.jsp">Store products</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/receipt_report.jsp">Reciepts</a></li>
+
                         </ul>
                     </li>
                 </ul>
