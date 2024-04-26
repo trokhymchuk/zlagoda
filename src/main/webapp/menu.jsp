@@ -88,12 +88,12 @@
                             Reports
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/employee_report.jsp">Employees</a></li>
-                            <li><a class="dropdown-item" href="/customer_report.jsp">Customers</a></li>
-                            <li><a class="dropdown-item" href="/category_report.jsp">Categories</a></li>
-                            <li><a class="dropdown-item" href="/product_report.jsp">Products</a></li>
-                            <li><a class="dropdown-item" href="/store_product_report.jsp">Store products</a></li>
-                            <li><a class="dropdown-item" href="/receipt_report.jsp">Reciepts</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/employee_report.jsp">Employees</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/customer_report.jsp">Customers</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/category_report.jsp">Categories</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/product_report.jsp">Products</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/store_product_report.jsp">Store products</a></li>
+                            <li><a class="dropdown-item" target=”_blank” href="/receipt_report.jsp">Reciepts</a></li>
 
                         </ul>
                     </li>
