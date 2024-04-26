@@ -28,7 +28,9 @@
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/>
 <sql:query dataSource="${snapshot}" var="result">
 
-    SELECT product_name, COALESCE((SELECT SUM(products_number) FROM Sale INNER JOIN Store_product ON Sale.UPC=Store_product.UPC INNER JOIN Checktable ON Sale.check_number=Checktable.check_number WHERE Store_product.id_product=Product.id_product AND print_date >= '<%=start_date%>' AND print_date < '<%=end_date%>'), 0) as sell_count FROM Product ORDER BY sell_count DESC;</sql:query>
+    SELECT product_name, COALESCE((SELECT SUM(product_number) FROM Sale INNER JOIN Store_product ON Sale.UPC=Store_product.UPC INNER JOIN Checktable ON Sale.check_number=Checktable.check_number WHERE Store_product.id_product=Product.id_product AND print_date >= '<%=start_date%>' AND print_date < '<%=end_date%>'), 0) as sell_count FROM Product ORDER BY sell_count DESC;
+
+</sql:query>
 
 <div class="container">
     <form id="searchForm" action="product_stats.jsp" method="get">
