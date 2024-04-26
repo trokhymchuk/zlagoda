@@ -34,7 +34,7 @@
                             <li><a class="dropdown-item" href="/store_products.jsp">List</a></li>
                             <li><a class="dropdown-item" href="/add_store_product.jsp">Add</a></li>
                             <li><a class="dropdown-item" href="/product_stats.jsp">Stats</a></li>
-                            <li><a class="dropdown-item" href="/regular_store_products.jsp">Regular</a></li>
+<%--                            <li><a class="dropdown-item" href="/regular_store_products.jsp">Regular</a></li>--%>
                             <li><a class="dropdown-item" href="/prom_non_prom_products.jsp">Prom-Non-Prom</a></li>
                         </ul>
                     </li>
