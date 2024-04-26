@@ -4,6 +4,32 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 
+<c:if test="${cookie['role'] == null}">
+    <%
+        String redirectURLMainPage = "http://localhost:8080/login.jsp";
+        response.sendRedirect(redirectURLMainPage);
+    %>
+</c:if>
+
+
+<head>
+
+    <style>
+        <c:choose>
+
+        <c:when test = "${!cookie['role'].getValue().equals('Manager')}">
+
+        .manager{
+            display: none;
+        }
+
+        </c:when>
+        </c:choose>
+
+    </style>
+</head>
+
+
 <jsp:include page="header.jsp"/>
 <jsp:include page="DB.jsp"/>
 <%
@@ -34,9 +60,9 @@
             <th scope="col">Product Name</th>
             <th scope="col">Price</th>
             <th scope="col">Products number</th>
-            <th scope="col">Promotional</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
+            <th scope="col" class="manager">Promotional</th>
+            <th scope="col" class="manager">Edit</th>
+            <th scope="col" class="manager">Delete</th>
 
         </tr>
         </thead>
@@ -52,7 +78,7 @@
                 <td><c:out value="${row.selling_price}"/></td>
                 <td><c:out value="${row.products_number}"/></td>
 
-                <td>
+                <td class="manager" >
                     <c:choose>
                         <c:when test="${row.promotional_product}">
                             <button type="button" class="btn btn-outline-secondary" disabled>Promotional</button>
@@ -74,11 +100,11 @@
                         </c:otherwise>
                     </c:choose>
                 </td>
-                <td>
+                <td class="manager">
                     <a class="btn btn-primary" href="edit_store_product.jsp?UPC=${row.UPC}"><i
                             class="fa-solid fa-pen-to-square"></i></a>
                 </td>
-                <td>
+                <td class="manager">
                     <button onclick="remove_store_product('${row.UPC}')" type="button" class="btn btn-danger"><i
                             class="fa-solid fa-trash"
                     ></i>

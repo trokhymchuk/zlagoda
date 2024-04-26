@@ -66,7 +66,7 @@
                 <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>
                 <div class="col-sm-10">
                     <input type="password" name="password" class="form-control"
-                           value="" minlength="6">
+                           value="" minlength="6" required>
                 </div>
             </div>
 

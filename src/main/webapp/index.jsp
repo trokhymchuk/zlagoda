@@ -9,7 +9,7 @@
 <img src="image.png" alt="Zlagoda in the future" width="100%">
 <jsp:include page="footer.jsp" />
 
-<c:if test="${!(cookie['role'].getValue().equals('Manager') || cookie['role'].getValue().equals('Cashier'))}">
+<c:if test="${cookie['role'] == null || !(cookie['role'].getValue().equals('Manager') || cookie['role'].getValue().equals('Cashier'))}">
     <%
             String redirectURL = "http://localhost:8080/login.jsp";
             response.sendRedirect(redirectURL);

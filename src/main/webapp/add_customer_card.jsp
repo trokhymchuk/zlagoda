@@ -4,6 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 
+
+
+
 <jsp:include page="header.jsp" />
 <jsp:include page="DB.jsp" />
 <%

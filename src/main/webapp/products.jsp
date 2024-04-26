@@ -4,6 +4,34 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 
+
+
+<c:if test="${cookie['role'] == null}">
+    <%
+        String redirectURLMainPage = "http://localhost:8080/login.jsp";
+        response.sendRedirect(redirectURLMainPage);
+    %>
+</c:if>
+
+
+
+<head>
+
+    <style>
+<c:choose>
+
+    <c:when test = "${!cookie['role'].getValue().equals('Manager')}">
+
+.manager{
+    display: none;
+}
+
+</c:when>
+</c:choose>
+
+    </style>
+</head>
+
 <jsp:include page="header.jsp"/>
 <jsp:include page="DB.jsp"/>
 <%
@@ -48,8 +76,9 @@
             <th scope="col">Name</th>
             <th scope="col">Category</th>
             <th scope="col">Characteristics</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
+
+            <th scope="col" class="manager">Edit</th>
+            <th scope="col" class="manager">Delete</th>
 
         </tr>
         </thead>

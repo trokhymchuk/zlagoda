@@ -4,6 +4,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 
+
+
+<c:if test="${cookie['role'] == null}">
+  <%
+    String redirectURLMainPage = "http://localhost:8080/login.jsp";
+    response.sendRedirect(redirectURLMainPage);
+  %>
+</c:if>
+
+
+
+
 <jsp:include page="header.jsp" />
 <jsp:include page="DB.jsp" />
 <%

@@ -101,11 +101,11 @@ public class HelloServlet extends HttpServlet {
                 <td>%s</td>
                 <td>%s</td>
                                 <td>%s</td>
-                <td>
+                <td class="manager">
                     <a class="btn btn-primary" href="edit_product.jsp?id=%s"><i
                             class="fa-solid fa-pen-to-square"></i></a>
                 </td>
-                <td>
+                <td class="manager">
                     <button onclick="remove_product('%s')" type="button" class="btn btn-danger"><i
                             class="fa-solid fa-trash"
                     ></i>

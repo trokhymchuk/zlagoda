@@ -4,6 +4,33 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 
+
+
+<c:if test="${cookie['role'] == null}">
+    <%
+        String redirectURLMainPage = "http://localhost:8080/index.jsp";
+        response.sendRedirect(redirectURLMainPage);
+    %>
+</c:if>
+
+<head>
+
+    <style>
+        <c:choose>
+
+        <c:when test = "${!cookie['role'].getValue().equals('Manager')}">
+
+        .manager{
+            display: none;
+        }
+
+        </c:when>
+        </c:choose>
+
+    </style>
+</head>
+
+
 <jsp:include page="header.jsp" />
 <jsp:include page="DB.jsp" />
 <%
@@ -24,8 +51,8 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
+            <th scope="col" class="manager">Edit</th>
+            <th scope="col" class="manager">Delete</th>
 
         </tr>
         </thead>
@@ -34,11 +61,11 @@
             <tr>
                 <th scope="row"><c:out value="${row.category_number}"/></th>
                 <td><c:out value="${row.category_name}"/></td>
-                <td>
+                <td class="manager">
                     <a class="btn btn-primary" href="edit_category.jsp?id=${row.category_number}"><i
                             class="fa-solid fa-pen-to-square"></i></a>
                 </td>
-                <td>
+                <td class="manager">
                     <button onclick="remove_category('${row.category_number}')" type="button" class="btn btn-danger"><i
                             class="fa-solid fa-trash"
                     ></i>
