@@ -32,6 +32,10 @@
   SELECT * from Category;
 </sql:query>
 
+<sql:query dataSource="${snapshot}" var="category">
+  SELECT * from Category WHERE category_number = '<%= request.getParameter("category")%>';
+</sql:query>
+
 <div class="container">
   <form id="searchForm">
     <div class="input-group mb-3">
@@ -45,7 +49,10 @@
       <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
     </div>
   </form>
-
+  <h2></h2>
+  <c:forEach var="row" items="${category.rows}">
+    <h2><c:out value="${row.category_name}"/></h2>
+  </c:forEach>
   <table class="table">
     <thead>
     <tr>
