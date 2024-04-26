@@ -17,12 +17,17 @@
 <sql:query dataSource="${snapshot}" var="result">
     SELECT Store_product.upc, product_name, SUM(product_number) as number_sold
     FROM sale inner join Store_product ON sale.upc = Store_product.upc inner join product ON Store_product.id_product =product.id_product
-    GROUP BY Store_product.upc, product.product_name
-    ORDER BY -SUM(product_number);
+    WHERE product.category_number = '<%= request.getParameter("category")%>'
+    GROUP BY Store_product.upc, product.product_name, product.category_number
+    ORDER BY -SUM(product_number), product_name;
 </sql:query>
 
 <sql:query dataSource="${snapshot}" var="categories">
     SELECT * from Category;
+</sql:query>
+
+<sql:query dataSource="${snapshot}" var="category">
+    SELECT * from Category WHERE category_number = '<%= request.getParameter("category")%>';
 </sql:query>
 
 <div class="container">
@@ -39,6 +44,10 @@
             <button type="button" class="btn btn-outline-secondary" onclick="search()">Search</button>
         </div>
     </form>
+    <h2></h2>
+    <c:forEach var="row" items="${category.rows}">
+        <h2><c:out value="${row.category_name}"/></h2>
+    </c:forEach>
     <table class="table">
         <thead>
         <tr>
