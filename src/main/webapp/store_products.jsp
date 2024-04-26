@@ -122,7 +122,7 @@
 
             },
             error: function (jqXHR, exception) {
-                alert("Could not delete product: " + jqXHR.responseText);
+                alert("Could not delete product: check with that product exists!");
                 console.log(jqXHR);
                 console.log(exception);
             }
