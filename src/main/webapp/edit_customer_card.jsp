@@ -25,7 +25,7 @@
     <div class="row mb-3">
       <label for="inputEmail3" class="col-sm-2 col-form-label">Surname</label>
       <div class="col-sm-10">
-        <input type="text" name="cust_surname" class="form-control"
+        <input type="text" minlength="3" required name="cust_surname" class="form-control"
                value="${result.rows[0].cust_surname}">
       </div>
     </div>
@@ -33,7 +33,7 @@
     <div class="row mb-3">
       <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
       <div class="col-sm-10">
-        <input type="text" name="cust_name" class="form-control"
+        <input type="text" minlength="3" required name="cust_name" class="form-control"
                value="${result.rows[0].cust_name}">
       </div>
     </div>
@@ -41,7 +41,7 @@
     <div class="row mb-3">
       <label for="inputEmail3" class="col-sm-2 col-form-label">Patronymic</label>
       <div class="col-sm-10">
-        <input type="text" name="cust_patronymic" class="form-control"
+        <input type="text"  name="cust_patronymic" class="form-control"
                value="${result.rows[0].cust_patronymic}">
       </div>
     </div>

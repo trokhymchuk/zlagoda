@@ -22,7 +22,7 @@
     <div class="row mb-3">
       <label for="inputEmail3" class="col-sm-2 col-form-label">Card Number</label>
       <div class="col-sm-10">
-        <input type="text" name="card_number" class="form-control"
+        <input type="text" minlength="3" required name="card_number" class="form-control"
                value="">
       </div>
     </div>

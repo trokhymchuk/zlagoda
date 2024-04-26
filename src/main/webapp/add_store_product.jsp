@@ -28,7 +28,7 @@
         <div class="row mb-3">
             <label for="inputEmail3" class="col-sm-2 col-form-label">UPC</label>
             <div class="col-sm-10">
-                <input type="text" minlength="3" name="UPC" class="form-control" id="inputEmail3"
+                <input type="text" minlength="3" required name="UPC" class="form-control" id="inputEmail3"
                        value="">
             </div>
         </div>

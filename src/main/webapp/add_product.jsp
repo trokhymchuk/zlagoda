@@ -27,7 +27,7 @@ SELECT * from Category;
     <div class="row mb-3">
     <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
     <div class="col-sm-10">
-    <input type="text" minlength="3" name="name" class="form-control" id="inputEmail3"
+    <input type="text" minlength="3" required name="name" class="form-control" id="inputEmail3"
         value="">
 </div>
 </div>
