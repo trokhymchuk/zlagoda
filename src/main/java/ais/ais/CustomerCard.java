@@ -57,6 +57,8 @@ public class CustomerCard extends HttpServlet {
                 delete(request, response);
             if (action.equals("add"))
                 add(request, response);
+            if (action.equals("listAllCategoryCards"))
+                listOfAllCategoryPurchaseCards(request, response);
 
         } catch (Exception e) {
             response.setStatus(504);
@@ -133,6 +135,12 @@ public class CustomerCard extends HttpServlet {
             response.setStatus(400);
             return;
         }
+        String phone_number = request.getParameter("phone_number");
+        if (phone_number == null || phone_number.trim().isEmpty()) {
+            response.getWriter().print("Phone number cannot be null or empty.");
+            response.setStatus(400);
+            return;
+        }
         String stat = "UPDATE Customer_Card SET cust_surname = ?, cust_name = ?, cust_patronymic = ?, phone_number = ?, city = ?, street = ?, zip_code = ?, percent = ? WHERE card_number = ?";
         PreparedStatement ps = connection.prepareStatement(stat);
         ps.setString(1, request.getParameter("cust_surname"));
@@ -188,6 +196,12 @@ public class CustomerCard extends HttpServlet {
             response.setStatus(400);
             return;
         }
+        String phone_number = request.getParameter("phone_number");
+        if (phone_number == null || phone_number.trim().isEmpty()) {
+            response.getWriter().print("Phone number cannot be null or empty.");
+            response.setStatus(400);
+            return;
+        }
         String stat = "INSERT INTO Customer_Card (card_number, cust_surname, cust_name, cust_patronymic, phone_number, city, street, zip_code, percent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(stat);
         ps.setString(1, request.getParameter("card_number"));
@@ -208,4 +222,44 @@ public class CustomerCard extends HttpServlet {
             response.setStatus(500);
         }
     }
+
+    private void listOfAllCategoryPurchaseCards(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        String query = "SELECT * FROM Customer_Card WHERE NOT EXISTS (" +
+                "SELECT * FROM Category WHERE category_number NOT IN (" +
+                "SELECT category_number FROM Sale " +
+                "INNER JOIN Store_Product ON Sale.UPC = Store_Product.UPC " +
+                "INNER JOIN Product ON Store_Product.id_product = Product.id_product " +
+                "INNER JOIN CheckTable ON Sale.check_number = CheckTable.check_number " +
+                "WHERE Customer_Card.card_number = CheckTable.card_number))";
+
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query);
+        StringBuilder resp = new StringBuilder();
+        while (rs.next()) {
+            String card_number = rs.getString("card_number");
+            String cust_surname = rs.getString("cust_surname");
+            String cust_name = rs.getString("cust_name");
+            String cust_patronymic = rs.getString("cust_patronymic");
+            String phone_number = rs.getString("phone_number");
+            String city = rs.getString("city");
+            String street = rs.getString("street");
+            String zip_code = rs.getString("zip_code");
+            int percent = rs.getInt("percent");
+            resp.append(card_number).append(" ")
+                    .append(cust_surname).append(" ")
+                    .append(cust_name).append(" ")
+                    .append(cust_patronymic).append(" ")
+                    .append(phone_number).append(" ")
+                    .append(city).append(" ")
+                    .append(street).append(" ")
+                    .append(zip_code).append(" ")
+                    .append(percent).append("<br>");
+        }
+        PrintWriter out = response.getWriter();
+        out.println("<html><body>");
+        out.println(resp.toString());
+        out.println("</body></html>");
+    }
+
+
 }

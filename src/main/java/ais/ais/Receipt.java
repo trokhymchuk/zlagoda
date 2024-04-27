@@ -4,6 +4,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -61,6 +62,7 @@ public class Receipt extends HttpServlet {
             if (action.equals("add")) add(request, response);
             if (action.equals("delete")) delete(request, response);
             if (action.equals("getTotalSum")) getTotalSum(request, response);
+            if (action.equals("getMostProfitableProducts")) getMostProfitableProducts(request, response);
         } catch (Exception e) {
             System.out.println("===========================" + e);
             response.setStatus(504);
@@ -238,4 +240,63 @@ public class Receipt extends HttpServlet {
             response.setStatus(500);
         }
     }
+
+
+    private void getMostProfitableProducts(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        java.sql.Date startDate = request.getParameter("startDate").isEmpty() ? null : java.sql.Date.valueOf(request.getParameter("startDate"));
+        java.sql.Date endDate = request.getParameter("endDate").isEmpty() ? null : java.sql.Date.valueOf(request.getParameter("endDate"));
+
+        String query = """
+        SELECT 
+            P.id_product,
+            P.product_name,
+            SUM(S.selling_price * S.product_number) AS total_revenue
+        FROM 
+            Product P
+        INNER JOIN 
+            Store_Product SP ON P.id_product = SP.id_product
+        INNER JOIN 
+            Sale S ON SP.UPC = S.UPC
+        INNER JOIN 
+            CheckTable C ON S.check_number = C.check_number
+        %s
+        GROUP BY 
+            P.id_product, P.product_name
+        ORDER BY 
+            total_revenue DESC;
+        """;
+
+        String dateFilter = "";
+        if (startDate != null && endDate != null) {
+            dateFilter = "WHERE C.print_date BETWEEN ? AND ?";
+        } else if (startDate != null) {
+            dateFilter = "WHERE C.print_date >= ?";
+        } else if (endDate != null) {
+            dateFilter = "WHERE C.print_date <= ?";
+        }
+
+        query = String.format(query, dateFilter);
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            int paramIndex = 1;
+            if (startDate != null) ps.setDate(paramIndex++, startDate);
+            if (endDate != null) ps.setDate(paramIndex++, endDate);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id_product");
+                String name = rs.getString("product_name");
+                double revenue = rs.getDouble("total_revenue");
+                out.println(String.format("<tr><td>%d</td><td>%s</td><td>%.2f</td></tr>", id, name, revenue));
+            }
+            response.setStatus(200);
+        } catch (SQLException e) {
+            out.println("Error fetching data: " + e.getMessage());
+            response.setStatus(500);
+        }
+    }
+
 }
