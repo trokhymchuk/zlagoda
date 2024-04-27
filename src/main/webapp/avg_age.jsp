@@ -25,11 +25,11 @@
                    url="jdbc:postgresql://127.0.0.1:5432/ais"
                    user="<%=potsgres_username%>" password="<%=postgres_password%>"/>
 <sql:query dataSource="${snapshot}" var="result">
-SELECT empl_name, EXTRACT(YEAR FROM AVG(NOW() - date_of_birth)) as age
+SELECT empl_name, EXTRACT(YEARS FROM AVG(AGE(NOW(), date_of_birth))) as age
 FROM Employee
 WHERE id_employee IN (SELECT id_employee
-                     FROM Checktable
-                     WHERE print_date > NOW() - interval '30' day)
+FROM Checktable
+WHERE print_date > NOW() - interval '30' day)
 AND empl_role='<%=request.getParameter("role")%>'
 GROUP BY empl_name;
 </sql:query>
